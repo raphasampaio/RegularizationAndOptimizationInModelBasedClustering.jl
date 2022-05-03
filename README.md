@@ -1,1 +1,0 @@
-# RegularizationAndGlobalOptimizationInModelBasedClustering.jl
