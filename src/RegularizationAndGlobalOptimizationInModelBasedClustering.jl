@@ -1,6 +1,5 @@
 module RegularizationAndGlobalOptimizationInModelBasedClustering
 
-using ArgParse
 using Clustering
 using CSV
 using DataFrames

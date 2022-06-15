@@ -59,7 +59,7 @@ function run(benchmark::Benchmark, n::Int, k::Int, d::Int, c::Float64, i::Int)
         t = @elapsed result = algorithm(dataset.X, dataset.k)
         ari = Clustering.randindex(dataset.expected, result.assignments)[1]
 
-        @show algorithm, ari, t
+        # @show algorithm, ari, t
 
         # save(dataset, result, "D:\\Development\\clustering\\img\\$(n)_$(k)_$(d)_$(c)_$(i)_$(algorithm).png")
         # println("$(name)_$i\t$current_ari\t$current_elapsed")
