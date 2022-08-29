@@ -2,4 +2,4 @@
 
 SET DOCUMENTER_DIR=%~dp0
 
-julia --project=%DOCUMENTER_DIR% %DOCUMENTER_DIR%\make.jl
+%JULIA_167% --project=%DOCUMENTER_DIR% %DOCUMENTER_DIR%\make.jl
