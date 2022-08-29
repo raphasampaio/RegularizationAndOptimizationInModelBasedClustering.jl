@@ -1,3 +1,5 @@
 using Test
 using RegularizationAndGlobalOptimizationInModelBasedClustering
 RegularizationAndGlobalOptimizationInModelBasedClustering.initialize()
+
+RegularizationAndGlobalOptimizationInModelBasedClustering.main([])
