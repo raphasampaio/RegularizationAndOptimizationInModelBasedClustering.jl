@@ -19,11 +19,6 @@ end
 
 include("benchmark.jl")
 include("dataset.jl")
-include("version.jl")
-
-function version()
-    return _VERSION
-end
 
 function run()
     Random.seed!(1)
