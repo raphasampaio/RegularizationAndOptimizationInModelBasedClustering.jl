@@ -4,6 +4,7 @@ authors = ["raphasampaio"]
 version = "0.1.0"
 
 [deps]
+ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 Clustering = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
@@ -15,8 +16,9 @@ TimerOutputs = "a759f4b9-e2f1-59dc-863e-4aeb61b1ea8f"
 UnsupervisedClustering = "c6b3b713-2a2b-4e07-a35c-d57ac4f46186"
 
 [compat]
-CSV = "=0.10.4"
+ArgParse = "=1.1.4"
 Clustering = "=0.14.2"
+CSV = "=0.10.4"
 DataFrames = "=1.3.4"
 TimerOutputs = "=0.5.20"
 julia = "1.6"

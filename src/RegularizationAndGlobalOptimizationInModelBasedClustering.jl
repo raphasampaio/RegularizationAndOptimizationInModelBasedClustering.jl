@@ -1,5 +1,6 @@
 module RegularizationAndGlobalOptimizationInModelBasedClustering
 
+using ArgParse
 using Clustering
 using CSV
 using DataFrames
@@ -10,9 +11,6 @@ using TimerOutputs
 using Dates
 using Random
 
-# constants
-
-# initializations
 function initialize()
     return nothing
 end
@@ -20,7 +18,7 @@ end
 include("benchmark.jl")
 include("dataset.jl")
 
-function run()
+function run(options::Dict{String, Any})
     Random.seed!(1)
 
     benchmark = Benchmark()
@@ -58,9 +56,9 @@ function run()
     clean!(benchmark)
 
     n = 100
-    for k in [3, 10, 20] # 3, 10, 20
-        for c in [-0.26, -0.1, 0.01, 0.21] # -0.26, -0.1, 0.01, 0.21
-            for d in [2, 5, 10, 20, 30, 40] # 2, 5, 10, 20, 30, 40
+    for k in options["k"]
+        for c in options["c"]
+            for d in options["d"]
                 for i in 1:20
                     run(benchmark, n, k, d, c, i)
                 end
