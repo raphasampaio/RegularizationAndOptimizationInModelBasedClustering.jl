@@ -1,5 +1,5 @@
 function main(args)
-    @info("RegularizationAndGlobalOptimizationInModelBasedClustering - version: $_VERSION")
+    @info("RegularizationAndGlobalOptimizationInModelBasedClustering")
 
     # parsed_args = parse_commandline(args)
 
