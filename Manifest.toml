@@ -267,7 +267,7 @@ version = "1.2.2"
 deps = ["LinearAlgebra", "Statistics"]
 git-tree-sha1 = "f7999f72f2f9193175c40c3f93c6dfdd33cf6b54"
 repo-rev = "master"
-repo-url = "git@github.com:raphasampaio/RegularizedCovariances.jl.git"
+repo-url = "https://github.com/raphasampaio/RegularizedCovariances.jl.git"
 uuid = "5bfb50f7-5e0c-48f2-b6cf-e6e905952022"
 version = "0.1.0"
 
@@ -372,7 +372,7 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [[UnsupervisedClustering]]
 deps = ["Distances", "Hungarian", "LinearAlgebra", "LogExpFunctions", "Random", "RegularizedCovariances", "Statistics", "StatsBase"]
-git-tree-sha1 = "4482dd4a24bd7e24a841cd83e17d2e47184b02cb"
+git-tree-sha1 = "02f345a7fad38bdcfc3ebcf07aea8ad90530d560"
 repo-rev = "master"
 repo-url = "https://github.com/raphasampaio/UnsupervisedClustering.jl.git"
 uuid = "c6b3b713-2a2b-4e07-a35c-d57ac4f46186"
