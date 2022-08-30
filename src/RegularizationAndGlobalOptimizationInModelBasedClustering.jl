@@ -65,6 +65,10 @@ function run()
                     run(benchmark, n, k, d, c, i)
                 end
 
+                if !isdir(joinpath(".", "results"))
+                    mkdir(joinpath(".", "results"))
+                end
+
                 save(benchmark, joinpath(".", "results", "$(benchmark_name).csv"))
             end
         end
