@@ -47,6 +47,15 @@ function clean!(benchmark::Benchmark)
         ari = Float64[],
         t = Float64[],
     )
+    benchmark.uci = DataFrame(
+        algorithm = Symbol[],
+        dataset = Symbol[],
+        n = Int[],
+        k = Int[],
+        d = Int[],
+        ari = Float64[],
+        t = Float64[],
+    )
     return nothing
 end
 
@@ -68,13 +77,31 @@ function run(benchmark::Benchmark, n::Int, k::Int, d::Int, c::Float64, i::Int)
     end
 end
 
-function save(benchmark::Benchmark, path::String)
+function run(benchmark::Benchmark, file::String)
+    for algorithm in benchmark.algorithms
+        dataset = Dataset(joinpath("data", "uci", "$file.csv"))
+
+        Random.seed!(1)
+        t = @elapsed result = algorithm(dataset.X, dataset.k)
+        ari = Clustering.randindex(dataset.expected, result.assignments)[1]
+
+        push!(benchmark.uci, (Symbol(algorithm), Symbol(file), size(dataset.X, 1), dataset.k, size(dataset.X, 2), ari, t))   
+    end
+end
+
+function save(benchmark::Benchmark, path::String, filename::String)
+    if !isdir(path)
+        mkdir(path)
+    end
+
     if size(benchmark.df, 1) > 0
         @show benchmark.df
-        CSV.write(path, benchmark.df)
-    else
+        CSV.write("$(joinpath(path, "$filename.csv"))", benchmark.df)
+    end
+
+    if size(benchmark.uci, 1) > 0
         @show benchmark.uci
-        # CSV.write(path, benchmark.uci)
+        CSV.write("$(joinpath(path, "$filename.csv"))", benchmark.uci)
     end
     return nothing
 end

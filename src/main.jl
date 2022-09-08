@@ -17,6 +17,14 @@ function parse_commandline(args)
             arg_type = Vector{Int}
             eval_arg = true
             help = ""
+        "-i"
+            default = [1:20;]
+            arg_type = Vector{Int}
+            eval_arg = true
+            help = ""
+        "--uci"
+            action = :store_true
+            help = ""
     end
 
     return ArgParse.parse_args(args, s)
