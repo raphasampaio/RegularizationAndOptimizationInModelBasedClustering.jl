@@ -82,7 +82,6 @@ function run(options::Dict{String, Any})
             "image_segmentation",
             "ionosphere",
             "iris",
-            "recognition",
             "letter_recognition",
             "magic",
             "mice_protein",
@@ -167,4 +166,4 @@ end
 
 include("main.jl")
 
-end # module
+end
