@@ -85,6 +85,8 @@ function run(benchmark::Benchmark, file::String)
         t = @elapsed result = algorithm(dataset.X, dataset.k)
         ari = Clustering.randindex(dataset.expected, result.assignments)[1]
 
+        println("$file, $algorithm, $ari, $t")
+
         push!(benchmark.uci, (Symbol(algorithm), Symbol(file), size(dataset.X, 1), dataset.k, size(dataset.X, 2), ari, t))   
     end
 end
