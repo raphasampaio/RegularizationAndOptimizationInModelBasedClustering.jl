@@ -64,6 +64,7 @@ function run(benchmark::Benchmark, file::String)
         # pvalue = HypothesisTests.pvalue(ExactSignedRankTest(dataset.expected, result.assignments))
 
         println("$file, $algorithm, $ari, $t")
+        
         push!(benchmark.uci, (Symbol(algorithm), Symbol(file), n, k, d, ari, t))
     end
 end
