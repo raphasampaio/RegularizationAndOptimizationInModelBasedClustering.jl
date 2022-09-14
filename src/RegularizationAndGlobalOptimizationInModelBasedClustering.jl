@@ -5,10 +5,12 @@ using Clustering
 using CSV
 using DataFrames
 using DelimitedFiles
+using HypothesisTests
 using UnsupervisedClustering
 using TimerOutputs
 
 using Dates
+using Printf
 using Random
 
 function initialize()
@@ -17,6 +19,7 @@ end
 
 include("benchmark.jl")
 include("dataset.jl")
+include("postprocessing.jl")
 
 function run(options::Dict{String, Any})
     Random.seed!(1)
@@ -58,15 +61,14 @@ function run(options::Dict{String, Any})
     filename = "$timestamp-$(join(options["k"], ","))-$(join(options["c"], ","))-$(join(options["d"], ","))"
 
     # precompile 
-    run(benchmark, 100, 3, 2, -0.26, 1)
+    run(benchmark, 3, 2, -0.26, 1)
     clean!(benchmark)
 
-    n = 100
     for k in options["k"]
         for c in options["c"]
             for d in options["d"]
                 for i in options["i"]
-                    run(benchmark, n, k, d, c, i)
+                    run(benchmark, k, d, c, i)
                 end
                 save(benchmark, joinpath(".", "results"), filename)
             end
