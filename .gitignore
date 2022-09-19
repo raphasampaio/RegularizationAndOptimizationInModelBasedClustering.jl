@@ -1,4 +1,5 @@
 compile/build/
+compile/Manifest.toml
 
 docs/build/
 docs/site/
@@ -6,3 +7,10 @@ docs/site/
 formatter/Manifest.toml
 
 revise/Manifest.toml
+
+test/synthetical/partes-upload
+test/synthetical/upload_*
+test/synthetical/dsbcaseinfo.dat
+test/uci/partes-upload
+test/uci/upload_*
+test/uci/dsbcaseinfo.dat
