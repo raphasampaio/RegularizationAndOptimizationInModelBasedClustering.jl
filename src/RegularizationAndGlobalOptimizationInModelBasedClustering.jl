@@ -101,7 +101,8 @@ function run(options::Dict{String, Any})
     day = Dates.day(now)
     hour = Dates.hour(now)
     minute = Dates.minute(now)
-    timestamp = "$year-$month-$day-$hour-$minute"
+    second = Dates.second(now)
+    timestamp = "$year-$month-$day-$hour-$minute-$second"
 
     k_str = join(options["k"], ",")
     c_str = join(options["c"], ",")
