@@ -11,6 +11,7 @@ mutable struct Benchmark
             d = Int[],
             i = Int[],
             ari = Float64[],
+            obj = Float64[],
             t = Float64[],
         )
         uci = DataFrame(
@@ -19,7 +20,9 @@ mutable struct Benchmark
             n = Int[],
             k = Int[],
             d = Int[],
+            i = Int[],
             ari = Float64[],
+            obj = Float64[],
             t = Float64[],
         )
         return new(syn, uci, Vector{Function}())
@@ -45,27 +48,29 @@ function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
         Random.seed!(1)
         t = @elapsed result = algorithm(dataset.X, dataset.k)
         ari = Clustering.randindex(dataset.expected, result.assignments)[1]
-        # pvalue = HypothesisTests.pvalue(ExactSignedRankTest(dataset.expected, result.assignments))
+        obj = result.totalcost
 
-        push!(benchmark.syn, (Symbol(algorithm), k, c, d, i, ari, t))
+        push!(benchmark.syn, (Symbol(algorithm), k, c, d, i, ari, obj, t))
     end
 end
 
-function run(benchmark::Benchmark, file::String)
+function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
     for algorithm in benchmark.algorithms
         dataset = Dataset(joinpath("data", "uci", "$file.csv"))
         n = size(dataset.X, 1)
         k = dataset.k
         d = size(dataset.X, 2)
 
-        Random.seed!(1)
-        t = @elapsed result = algorithm(dataset.X, dataset.k)
-        ari = Clustering.randindex(dataset.expected, result.assignments)[1]
-        # pvalue = HypothesisTests.pvalue(ExactSignedRankTest(dataset.expected, result.assignments))
+        for seed in seeds
+            Random.seed!(seed)
+            t = @elapsed result = algorithm(dataset.X, dataset.k)
+            ari = Clustering.randindex(dataset.expected, result.assignments)[1]
+            obj = result.totalcost
 
-        println("$file, $algorithm, $ari, $t")
-        
-        push!(benchmark.uci, (Symbol(algorithm), Symbol(file), n, k, d, ari, t))
+            println("$file, $algorithm, $seed, $ari, $obj, $t")
+            
+            push!(benchmark.uci, (Symbol(algorithm), Symbol(file), n, k, d, seed, ari, obj, t))
+        end
     end
 end
 

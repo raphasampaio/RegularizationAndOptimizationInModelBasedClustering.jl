@@ -12,6 +12,50 @@ using TimerOutputs
 using Dates
 using Printf
 using Random
+using Statistics
+
+const translation = Dict(
+    "kmeans" => "k-means",
+    "kmeans_ms" => "k-means MS",
+    "kmeans_rs" => "k-means RS",
+    "kmeans_hg" => "k-means HG",
+    "gmm" => "GMM",
+    "gmm_ms" => "GMM MS",
+    "gmm_rs" => "GMM RS",
+    "gmm_hg" => "GMM HG",
+    "gmm_shrunk" => "GMM Shrunk",
+    "gmm_ms_shrunk" => "GMM MS Shrunk",
+    "gmm_rs_shrunk" => "GMM RS Shrunk",
+    "gmm_hg_shrunk" => "GMM HG Shrunk",
+    "gmm_oas" => "GMM OAS",
+    "gmm_ms_oas" => "GMM MS OAS",
+    "gmm_rs_oas" => "GMM RS OAS",
+    "gmm_hg_oas" => "GMM HG OAS",
+    "gmm_ledoitwolf" => "GMM Ledoitwolf",
+    "gmm_ms_ledoitwolf" => "GMM MS Ledoitwolf",
+    "gmm_rs_ledoitwolf" => "GMM RS Ledoitwolf",
+    "gmm_hg_ledoitwolf" => "GMM HG Ledoitwolf",
+)
+
+const uci_datasets = [
+    "facebook_live_sellers",
+    "digits",
+    "hcv",
+    "human_activity_recognition",
+    "image_segmentation",
+    "ionosphere",
+    "iris",
+    "letter_recognition",
+    "magic",
+    "mice_protein",
+    "pendigits",
+    "seeds",
+    "spect",
+    "shuttle",
+    "wholesale",
+    "wines",
+    "yeast",
+]
 
 function initialize()
     return nothing
@@ -76,28 +120,8 @@ function run(options::Dict{String, Any})
     end
 
     if options["uci"]
-        datasets = [
-            "facebook_live_sellers",
-            "digits",
-            "hcv",
-            "human_activity_recognition",
-            "image_segmentation",
-            "ionosphere",
-            "iris",
-            "letter_recognition",
-            "magic",
-            "mice_protein",
-            "pendigits",
-            "seeds",
-            "spect",
-            "shuttle",
-            "wholesale",
-            "wines",
-            "yeast",
-        ]
-
-        for dataset in datasets
-            run(benchmark, dataset)
+        for dataset in uci_datasets
+            run(benchmark, dataset, options["i"])
             save(benchmark, joinpath(".", "results"), "$timestamp-uci")
         end
 

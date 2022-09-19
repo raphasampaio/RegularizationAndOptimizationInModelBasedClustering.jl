@@ -1,27 +1,47 @@
-function wilcoxon()
-    translation = Dict(
-        "kmeans" => "k-means",
-        "kmeans_ms" => "k-means MS",
-        "kmeans_rs" => "k-means RS",
-        "kmeans_hg" => "k-means HG",
-        "gmm" => "GMM",
-        "gmm_ms" => "GMM MS",
-        "gmm_rs" => "GMM RS",
-        "gmm_hg" => "GMM HG",
-        "gmm_shrunk" => "GMM Shrunk",
-        "gmm_ms_shrunk" => "GMM MS Shrunk",
-        "gmm_rs_shrunk" => "GMM RS Shrunk",
-        "gmm_hg_shrunk" => "GMM HG Shrunk",
-        "gmm_oas" => "GMM OAS",
-        "gmm_ms_oas" => "GMM MS OAS",
-        "gmm_rs_oas" => "GMM RS OAS",
-        "gmm_hg_oas" => "GMM HG OAS",
-        "gmm_ledoitwolf" => "GMM Ledoitwolf",
-        "gmm_ms_ledoitwolf" => "GMM MS Ledoitwolf",
-        "gmm_rs_ledoitwolf" => "GMM RS Ledoitwolf",
-        "gmm_hg_ledoitwolf" => "GMM HG Ledoitwolf",
-    )
+function uci()
+    results = CSV.read(joinpath("results", "uci.csv"), DataFrame)
+    
+println("""
+\\begin{table}[htbp]
+\\centering
+\\scalebox{0.9}
+{
+\\begin{tabular}{@{}c|cccccccccc@{}}
+\\toprule
+\\multirow{3}{*}{\\#} & k-means & k-means & GMM & GMM & GMM & GMM & GMM   & GMM    & GMM    & GMM    \\
+                    &         & HG      &     & MS  & RS  & HG  &        & MS     & RS     & HG     \\
+                    &         &         &     &     &     &     & Shrunk & Shrunk & Shrunk & Shrunk \\ \\midrule 
+""")
 
+chars = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"]
+
+    for i in 1:length(uci_datasets)
+        dataset = uci_datasets[i]
+        println("\\texttt{$(chars[i])} &")
+
+        values = filter(row -> row.dataset == dataset, results).ari
+        min = minimum(values)
+        max = maximum(values)
+
+        for algorithm in ["kmeans", "kmeans_hg", "gmm"]
+            df = filter(row -> row.dataset == dataset && row.algorithm == algorithm, results)
+            v = @sprintf "%.2f" Statistics.mean(df.ari)
+            println("\\cellcolor[HTML]{F5F5F8}$v &")
+        end
+        println("\\\\")
+    end
+    println(
+"""
+\\bottomrule
+\\end{tabular}
+}
+\\caption{ARI in UCI datasets for multiple methods}
+\\label{uci_ari}
+\\end{table}
+""")
+end
+
+function wilcoxon()
     results = CSV.read(joinpath("results", "synthetical-v2.csv"), DataFrame)
     sort!(results, [:algorithm, :k, :c, :d, :i])
     # filter!(row -> row.k == 10 && row.c == 0.01, results)
