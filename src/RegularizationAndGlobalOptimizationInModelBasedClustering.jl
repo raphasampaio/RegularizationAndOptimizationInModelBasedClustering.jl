@@ -102,7 +102,13 @@ function run(options::Dict{String, Any})
     hour = Dates.hour(now)
     minute = Dates.minute(now)
     timestamp = "$year-$month-$day-$hour-$minute"
-    filename = "$timestamp-$(join(options["k"], ","))-$(join(options["c"], ","))-$(join(options["d"], ","))"
+
+    k_str = join(options["k"], ",")
+    c_str = join(options["c"], ",")
+    d_str = join(options["d"], ",")
+    i_str = join(options["i"], ",")
+
+    filename = "$timestamp-[$k_str]-[$c_str]-[$d_str]-[$i_str]"
 
     # precompile 
     run(benchmark, 3, 2, -0.26, 1)
@@ -119,10 +125,12 @@ function run(options::Dict{String, Any})
         end
     end
 
+    filename = "$timestamp-uci-[$i_str]"
+
     if options["uci"]
         for dataset in uci_datasets
             run(benchmark, dataset, options["i"])
-            save(benchmark, joinpath(".", "results"), "$timestamp-uci")
+            save(benchmark, joinpath(".", "results"), filename)
         end
 
     #         "cervical_cancer",
