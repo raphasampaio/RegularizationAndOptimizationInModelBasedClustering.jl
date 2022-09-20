@@ -2,46 +2,76 @@ function to_string(x, fmt)
     return Printf.format(Printf.Format(fmt), x)
 end
 
+function linear_interpolation(p::Float64, p_min::Float64, p_max::Float64, i_min::Float64, i_max::Float64)
+    return i_min + (((p - p_min) * (i_max - i_min)) / (p_max - p_min))
+end
+
+function get_greyscale(v, min, max)
+    a = linear_interpolation(v, min, max, 1.0, 0.75)
+    return hex(RGB(a, a, a))
+end
+
 function uci()
+    algorithms = [
+        "kmeans", 
+        "kmeans_hg", 
+        "gmm", 
+        "gmm_ms", 
+        "gmm_rs", 
+        "gmm_hg", 
+        "gmm_shrunk", 
+        "gmm_ms_shrunk",
+        "gmm_rs_shrunk", 
+        "gmm_hg_shrunk"
+    ]
+
     results = CSV.read(joinpath("results", "uci.csv"), DataFrame)
     
-println("""
-\\begin{table}[htbp]
-\\centering
-\\scalebox{0.9}
+println(raw"""
+\begin{table}[htbp]
+\centering
+\scalebox{0.9}
 {
-\\begin{tabular}{@{}c|cccccccccc@{}}
-\\toprule
-\\multirow{3}{*}{\\#} & k-means & k-means & GMM & GMM & GMM & GMM & GMM   & GMM    & GMM    & GMM    \\
+\begin{tabular}{@{}c|cccccccccc@{}}
+\toprule
+\multirow{3}{*}{\#} & k-means & k-means & GMM & GMM & GMM & GMM & GMM   & GMM    & GMM    & GMM    \\
                     &         & HG      &     & MS  & RS  & HG  &        & MS     & RS     & HG     \\
-                    &         &         &     &     &     &     & Shrunk & Shrunk & Shrunk & Shrunk \\ \\midrule 
+                    &         &         &     &     &     &     & Shrunk & Shrunk & Shrunk & Shrunk \\ \midrule 
 """)
 
 chars = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"]
 
-    for i in 1:length(uci_datasets)
+    for i in 1:1#length(uci_datasets)
         dataset = uci_datasets[i]
-        println("\\texttt{$(chars[i])} &")
+        print("\\texttt{$(chars[i])}")
 
-        values = filter(row -> row.dataset == dataset, results).ari
-        min = minimum(values)
-        max = maximum(values)
-
-        for algorithm in ["kmeans", "kmeans_hg", "gmm"]
+        data = Vector{Float64}()
+        for algorithm in algorithms
             df = filter(row -> row.dataset == dataset && row.algorithm == algorithm, results)
-            v = @sprintf "%.2f" Statistics.mean(df.ari)
-            println("\\cellcolor[HTML]{F5F5F8}$v &")
+            push!(data, Statistics.mean(df.ari))
         end
-        println("\\\\")
+
+        min, min_j = findmin(data)
+        max, max_j = findmax(data)
+
+        for j in eachindex(data)
+            v = @sprintf "%.2f" data[j]
+            hex = get_greyscale(data[j], min, max)
+            if j == max_j
+                print(" & \\cellcolor[HTML]{$hex}\\textbf{$v}")
+            else
+                print(" & \\cellcolor[HTML]{$hex}$v")
+            end
+        end
+        println(" \\\\")
     end
-    println(
-"""
-\\bottomrule
-\\end{tabular}
+    println(raw"""
+\bottomrule
+\end{tabular}
 }
-\\caption{ARI in UCI datasets for multiple methods}
-\\label{uci_ari}
-\\end{table}
+\caption{ARI in UCI datasets for multiple methods}
+\label{uci_ari}
+\end{table}
 """)
 end
 

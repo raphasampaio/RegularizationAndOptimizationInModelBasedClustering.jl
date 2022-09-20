@@ -2,6 +2,7 @@ module RegularizationAndGlobalOptimizationInModelBasedClustering
 
 using ArgParse
 using Clustering
+using Colors
 using CSV
 using DataFrames
 using DelimitedFiles
