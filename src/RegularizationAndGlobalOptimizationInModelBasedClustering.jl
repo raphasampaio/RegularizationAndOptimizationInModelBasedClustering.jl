@@ -127,12 +127,11 @@ function run(options::Dict{String, Any})
         end
     end
 
-    datasets_str = join(options["datasets"], ",")
-    filename = "$timestamp-uci-[$datasets_str]-[$i_str]"
+    filename = "$timestamp-uci-[$i_str]"
 
     if options["uci"]
-        for dataset in options["datasets"]
-            run(benchmark, uci_datasets[dataset], options["i"])
+        for dataset in uci_datasets
+            run(benchmark, dataset, options["i"])
             save(benchmark, joinpath(".", "results"), filename)
         end
 
