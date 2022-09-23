@@ -50,6 +50,8 @@ function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
         ari = Clustering.randindex(dataset.expected, result.assignments)[1]
         obj = result.totalcost
 
+        println("$file, $algorithm, $ari, $obj, $t")
+
         push!(benchmark.syn, (Symbol(algorithm), k, c, d, i, ari, obj, t))
     end
 end
@@ -80,12 +82,10 @@ function save(benchmark::Benchmark, path::String, filename::String)
     end
 
     if size(benchmark.syn, 1) > 0
-        @show benchmark.syn
         CSV.write("$(joinpath(path, "$filename.csv"))", benchmark.syn)
     end
 
     if size(benchmark.uci, 1) > 0
-        @show benchmark.uci
         CSV.write("$(joinpath(path, "$filename.csv"))", benchmark.uci)
     end
     return nothing
