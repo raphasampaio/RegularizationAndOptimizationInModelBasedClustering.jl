@@ -71,30 +71,49 @@ function run(options::Dict{String, Any})
 
     benchmark = Benchmark()
 
-    push!(benchmark, UnsupervisedClustering.kmeans)
-    push!(benchmark, UnsupervisedClustering.kmeans_ms)
-    push!(benchmark, UnsupervisedClustering.kmeans_rs)
-    push!(benchmark, UnsupervisedClustering.kmeans_hg)
-
-    push!(benchmark, UnsupervisedClustering.gmm)
-    push!(benchmark, UnsupervisedClustering.gmm_ms)
-    push!(benchmark, UnsupervisedClustering.gmm_rs)
-    push!(benchmark, UnsupervisedClustering.gmm_hg)
-
-    push!(benchmark, UnsupervisedClustering.gmm_shrunk)
-    push!(benchmark, UnsupervisedClustering.gmm_ms_shrunk)
-    push!(benchmark, UnsupervisedClustering.gmm_rs_shrunk)
-    push!(benchmark, UnsupervisedClustering.gmm_hg_shrunk)
-
-    push!(benchmark, UnsupervisedClustering.gmm_oas)
-    push!(benchmark, UnsupervisedClustering.gmm_ms_oas)
-    push!(benchmark, UnsupervisedClustering.gmm_rs_oas)
-    push!(benchmark, UnsupervisedClustering.gmm_hg_oas)
-
-    push!(benchmark, UnsupervisedClustering.gmm_ledoitwolf)
-    push!(benchmark, UnsupervisedClustering.gmm_ms_ledoitwolf)
-    push!(benchmark, UnsupervisedClustering.gmm_rs_ledoitwolf)
-    push!(benchmark, UnsupervisedClustering.gmm_hg_ledoitwolf)
+    for algorithm in options["algorithms"]
+        if algorithm == 1
+            push!(benchmark, UnsupervisedClustering.kmeans)
+        elseif algorithm == 2
+            push!(benchmark, UnsupervisedClustering.kmeans_ms)
+        elseif algorithm == 3
+            push!(benchmark, UnsupervisedClustering.kmeans_rs)
+        elseif algorithm == 4
+            push!(benchmark, UnsupervisedClustering.kmeans_hg)
+        elseif algorithm == 5
+            push!(benchmark, UnsupervisedClustering.gmm)
+        elseif algorithm == 6
+            push!(benchmark, UnsupervisedClustering.gmm_ms)
+        elseif algorithm == 7
+            push!(benchmark, UnsupervisedClustering.gmm_rs)
+        elseif algorithm == 8
+            push!(benchmark, UnsupervisedClustering.gmm_hg)
+        elseif algorithm == 9
+            push!(benchmark, UnsupervisedClustering.gmm_shrunk)
+        elseif algorithm == 10
+            push!(benchmark, UnsupervisedClustering.gmm_ms_shrunk)
+        elseif algorithm == 11
+            push!(benchmark, UnsupervisedClustering.gmm_rs_shrunk)
+        elseif algorithm == 12
+            push!(benchmark, UnsupervisedClustering.gmm_hg_shrunk)
+        elseif algorithm == 13
+            push!(benchmark, UnsupervisedClustering.gmm_oas)
+        elseif algorithm == 14
+            push!(benchmark, UnsupervisedClustering.gmm_ms_oas)
+        elseif algorithm == 15
+            push!(benchmark, UnsupervisedClustering.gmm_rs_oas)
+        elseif algorithm == 16
+            push!(benchmark, UnsupervisedClustering.gmm_hg_oas)
+        elseif algorithm == 17
+            push!(benchmark, UnsupervisedClustering.gmm_ledoitwolf)
+        elseif algorithm == 18
+            push!(benchmark, UnsupervisedClustering.gmm_ms_ledoitwolf)
+        elseif algorithm == 19
+            push!(benchmark, UnsupervisedClustering.gmm_rs_ledoitwolf)
+        elseif algorithm == 20
+            push!(benchmark, UnsupervisedClustering.gmm_hg_ledoitwolf)
+        end
+    end
 
     now = Dates.now()
     year = Dates.year(now)
