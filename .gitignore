@@ -8,9 +8,6 @@ formatter/Manifest.toml
 
 revise/Manifest.toml
 
-test/synthetical/partes-upload
-test/synthetical/upload_*
-test/synthetical/dsbcaseinfo.dat
-test/uci/partes-upload
-test/uci/upload_*
-test/uci/dsbcaseinfo.dat
+partes-upload
+upload_*
+dsbcaseinfo.dat

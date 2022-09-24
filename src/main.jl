@@ -30,6 +30,11 @@ function parse_commandline(args)
             arg_type = Vector{Int}
             eval_arg = true
             help = ""
+        "--datasets"
+            default = [1:17;]
+            arg_type = Vector{Int}
+            eval_arg = true
+            help = ""
     end
 
     return ArgParse.parse_args(args, s)
