@@ -31,6 +31,4 @@ chmod +x run.sh
 ./run.sh -i=[6]  -c=[-0.1] &
 ./run.sh -i=[7]  -c=[-0.1] &
 ./run.sh -i=[8]  -c=[-0.1] &
-./run.sh -i=[9]  -c=[-0.1] &
-./run.sh -i=[10] -c=[-0.1] &
 wait

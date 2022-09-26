@@ -76,7 +76,7 @@ chars = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "
 end
 
 function wilcoxon()
-    results = CSV.read(joinpath("results", "synthetical-v4.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "synthetical-v5.csv"), DataFrame)
     sort!(results, [:algorithm, :k, :c, :d, :i])
     # filter!(row -> row.k == 10 && row.c == 0.01, results)
 
@@ -101,6 +101,7 @@ function wilcoxon()
 \\bottomrule
 \\end{tabular}
 \\caption{TODO}
+\\label{tab:wilcoxon1}
 \\end{table}
 """)
 
@@ -125,6 +126,7 @@ function wilcoxon()
 \\bottomrule
 \\end{tabular}
 \\caption{TODO}
+\\label{tab:wilcoxon2}
 \\end{table}
 """)
 
@@ -157,7 +159,7 @@ function cpu_time()
         "gmm_hg_shrunk" => "%.2f"
     )
 
-    results = CSV.read(joinpath("results", "synthetical-v4.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "synthetical-v5.csv"), DataFrame)
     sort!(results, [:algorithm, :k, :c, :d, :i])
 
 println(raw"""
