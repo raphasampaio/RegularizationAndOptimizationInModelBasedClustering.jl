@@ -77,10 +77,6 @@ function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
 end
 
 function save(benchmark::Benchmark, path::String, filename::String)
-    if !isdir(path)
-        mkdir(path)
-    end
-
     if size(benchmark.syn, 1) > 0
         CSV.write("$(joinpath(path, "$filename.csv"))", benchmark.syn)
     end
