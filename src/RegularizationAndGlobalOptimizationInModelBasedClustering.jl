@@ -129,7 +129,7 @@ function run(options::Dict{String, Any})
     d_str = join(options["d"], ",")
     i_str = join(options["i"], ",")
 
-    filename = "$timestamp-[$k_str]-[$c_str]-[$d_str]-[$i_str]"
+    filename = "[$k_str]-[$c_str]-[$d_str]-[$i_str]-$timestamp"
 
     # precompile 
     run(benchmark, 3, 2, -0.26, 1)
@@ -147,7 +147,7 @@ function run(options::Dict{String, Any})
     end
 
     datasets_str = join(options["datasets"], ",")
-    filename = "$timestamp-uci-[$datasets_str]-[$i_str]"
+    filename = "uci-[$datasets_str]-[$i_str]-$timestamp"
 
     if options["uci"]
         for dataset in options["datasets"]
