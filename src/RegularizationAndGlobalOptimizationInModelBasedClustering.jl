@@ -40,7 +40,7 @@ const translation = Dict(
 
 const uci_datasets = [
     "facebook_live_sellers",
-    "digits",
+    "handwritten_digits",
     "hcv",
     "human_activity_recognition",
     "image_segmentation",
@@ -59,8 +59,30 @@ const uci_datasets = [
     "waveform",
     "scadi",
     "glass",
-    "economics",
 ]
+
+const uci_translation = Dict(
+    "facebook_live_sellers" => "Facebook Live Sellers \\citep{dehouche2018facebook}",
+    "handwritten_digits" => "Handwritten Digits",
+    "hcv" => "HCV",
+    "human_activity_recognition" => "Human Activity Recognition \\citep{anguita2013public}",
+    "image_segmentation" => "Image Segmentation",
+    "ionosphere" => "Ionosphere",
+    "iris" => "Iris",
+    "letter_recognition" => "Letter Recognition",
+    "magic" => "MAGIC Gamma Telescope",
+    "mice_protein" => "Mice Protein Expression \\citep{higuera2015self}",
+    "pendigits" => "Pen-Based Recognition",
+    "seeds" => "Seeds",
+    "spect" => "SPECT Heart",
+    "shuttle" => "Statlog (Shuttle)",
+    "wholesale" => "Wholesale Customers",
+    "wines" => "Wines",
+    "yeast" => "Yeast",
+    "waveform" => "Waveform",
+    "scadi" => "Scadi",
+    "glass" => "Glass",
+)
 
 function initialize()
     return nothing

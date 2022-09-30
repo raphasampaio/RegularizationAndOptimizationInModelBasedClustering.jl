@@ -25,7 +25,30 @@ function uci()
         "gmm_hg_shrunk"
     ]
 
-    results = CSV.read(joinpath("results", "uci.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "uci-v7.csv"), DataFrame)
+
+    println(raw"""
+\begin{table}[htbp]
+\centering
+\scalebox{0.9}
+{
+\begin{tabular}{@{}c|l|rrr@{}}
+\toprule
+\multicolumn{1}{c|}{\#} & \multicolumn{1}{c|}{Dataset} & \multicolumn{1}{c}{\textit{n}} & \multicolumn{1}{c}{\textit{k}} & \multicolumn{1}{c}{\textit{d}} \\ \midrule""")
+for (i, dataset) in enumerate(sort(uci_datasets))
+    n = filter(row -> row.dataset == dataset, results).n[1]
+    k = filter(row -> row.dataset == dataset, results).k[1]
+    d = filter(row -> row.dataset == dataset, results).d[1]
+    println("\\texttt{$('@' + i)} & $(uci_translation[dataset]) & $n & $k & $d \\\\")
+end
+println(raw"""
+\bottomrule
+\end{tabular}
+}
+\caption{UCI datasets labels and dimensions.}
+\label{uci_dimensions}
+\end{table}
+""")
     
 println(raw"""
 \begin{table}[htbp]
@@ -39,16 +62,13 @@ println(raw"""
                     &         &         &     &     &     &     & Shrunk & Shrunk & Shrunk & Shrunk \\ \midrule 
 """)
 
-chars = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"]
-
-    for i in 1:1#length(uci_datasets)
-        dataset = uci_datasets[i]
-        print("\\texttt{$(chars[i])}")
+    for (i, dataset) in enumerate(sort(uci_datasets))
+        print("\\texttt{$('@' + i)}")
 
         data = Vector{Float64}()
         for algorithm in algorithms
             df = filter(row -> row.dataset == dataset && row.algorithm == algorithm, results)
-            push!(data, Statistics.mean(df.ari))
+            push!(data, round(Statistics.mean(df.ari); digits = 2))
         end
 
         min, min_j = findmin(data)
@@ -57,7 +77,7 @@ chars = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "
         for j in eachindex(data)
             v = @sprintf "%.2f" data[j]
             hex = get_greyscale(data[j], min, max)
-            if j == max_j
+            if j == max_j || max == data[j]
                 print(" & \\cellcolor[HTML]{$hex}\\textbf{$v}")
             else
                 print(" & \\cellcolor[HTML]{$hex}$v")
@@ -65,7 +85,31 @@ chars = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "
         end
         println(" \\\\")
     end
-    println(raw"""
+    print(raw"""
+\midrule
+\multicolumn{1}{c|}{Avg.}""")
+
+data = Vector{Float64}()
+for algorithm in algorithms
+    df = filter(row -> row.algorithm == algorithm, results)
+    push!(data, round(Statistics.mean(df.ari); digits = 2))
+end
+
+min, min_j = findmin(data)
+max, max_j = findmax(data)
+
+for j in eachindex(data)
+    v = @sprintf "%.2f" data[j]
+    hex = get_greyscale(data[j], min, max)
+    if j == max_j || max == data[j]
+        print(" & \\cellcolor[HTML]{$hex}\\textbf{$v}")
+    else
+        print(" & \\cellcolor[HTML]{$hex}$v")
+    end
+end
+println(" \\\\")
+
+println(raw"""
 \bottomrule
 \end{tabular}
 }
@@ -76,7 +120,7 @@ chars = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "
 end
 
 function wilcoxon()
-    results = CSV.read(joinpath("results", "synthetical-v5.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "synthetical-v7.csv"), DataFrame)
     sort!(results, [:algorithm, :k, :c, :d, :i])
     # filter!(row -> row.k == 10 && row.c == 0.01, results)
 
@@ -159,7 +203,7 @@ function cpu_time()
         "gmm_hg_shrunk" => "%.2f"
     )
 
-    results = CSV.read(joinpath("results", "synthetical-v5.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "synthetical-v7.csv"), DataFrame)
     sort!(results, [:algorithm, :k, :c, :d, :i])
 
 println(raw"""
