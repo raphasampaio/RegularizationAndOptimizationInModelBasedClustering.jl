@@ -56,6 +56,10 @@ const uci_datasets = [
     "wholesale",
     "wines",
     "yeast",
+    "waveform",
+    "scadi",
+    "glass",
+    "economics",
 ]
 
 function initialize()
