@@ -421,9 +421,9 @@ version = "1.2.2"
 
 [[deps.RegularizedCovarianceMatrices]]
 deps = ["LinearAlgebra", "Statistics"]
-git-tree-sha1 = "11455661b2654fa97636a6b58d5cd2c2ad184ec9"
+git-tree-sha1 = "b5a410941803c68bf784b8af2b99fca028ec204f"
 uuid = "5bfb50f7-5e0c-48f2-b6cf-e6e905952022"
-version = "0.1.0"
+version = "0.1.1"
 
 [[deps.Rmath]]
 deps = ["Random", "Rmath_jll"]
@@ -580,8 +580,8 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [[deps.UnsupervisedClustering]]
 deps = ["Distances", "Hungarian", "LinearAlgebra", "LogExpFunctions", "Printf", "Random", "RegularizedCovarianceMatrices", "Statistics", "StatsBase"]
-git-tree-sha1 = "4c3a8d30af82be9d5815ec4a7383f2cf334d958b"
-repo-rev = "master"
+git-tree-sha1 = "c3667d86d134210caa985d668dad13d70e3919a7"
+repo-rev = "main"
 repo-url = "https://github.com/raphasampaio/UnsupervisedClustering.jl.git"
 uuid = "c6b3b713-2a2b-4e07-a35c-d57ac4f46186"
 version = "0.1.0"

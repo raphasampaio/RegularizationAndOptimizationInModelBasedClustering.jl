@@ -93,14 +93,14 @@ function get_algorithm(algorithm::Symbol, n::Int, d::Int, seed::Int = 123)
 end
 
 function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
+    file = "$(k)_$(d)_$(c)_$(i)"
+
     for symbol in benchmark.symbols
-        file = "$(k)_$(d)_$(c)_$(i)"
         dataset = Dataset(joinpath("data", "$file.csv"))
-        _, n = size(dataset.X)
+        n, d = size(dataset.X)
 
         algorithm = get_algorithm(symbol, n, d, 123)
 
-        Random.seed!(1)
         t = @elapsed result = UnsupervisedClustering.train(algorithm, dataset.X, dataset.k)
         ari = Clustering.randindex(dataset.expected, result.assignments)[1]
         obj = result.objective
@@ -120,7 +120,6 @@ function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
         for seed in seeds
             algorithm = get_algorithm(symbol, n, d, seed)
 
-            Random.seed!(seed)
             t = @elapsed result = UnsupervisedClustering.train(algorithm, dataset.X, dataset.k)
             ari = Clustering.randindex(dataset.expected, result.assignments)[1]
             obj = result.objective
