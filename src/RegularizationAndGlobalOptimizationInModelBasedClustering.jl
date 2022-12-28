@@ -7,6 +7,8 @@ using CSV
 using DataFrames
 using DelimitedFiles
 using HypothesisTests
+using RegularizedCovarianceMatrices
+using Printf
 using UnsupervisedClustering
 using TimerOutputs
 
@@ -99,45 +101,45 @@ function run(options::Dict{String, Any})
 
     for algorithm in options["algorithms"]
         if algorithm == 1
-            push!(benchmark, UnsupervisedClustering.kmeans)
+            push!(benchmark, :kmeans)
         elseif algorithm == 2
-            push!(benchmark, UnsupervisedClustering.kmeans_ms)
+            push!(benchmark, :kmeans_ms)
         elseif algorithm == 3
-            push!(benchmark, UnsupervisedClustering.kmeans_rs)
+            push!(benchmark, :kmeans_rs)
         elseif algorithm == 4
-            push!(benchmark, UnsupervisedClustering.kmeans_hg)
+            push!(benchmark, :kmeans_hg)
         elseif algorithm == 5
-            push!(benchmark, UnsupervisedClustering.gmm)
+            push!(benchmark, :gmm)
         elseif algorithm == 6
-            push!(benchmark, UnsupervisedClustering.gmm_ms)
+            push!(benchmark, :gmm_ms)
         elseif algorithm == 7
-            push!(benchmark, UnsupervisedClustering.gmm_rs)
+            push!(benchmark, :gmm_rs)
         elseif algorithm == 8
-            push!(benchmark, UnsupervisedClustering.gmm_hg)
+            push!(benchmark, :gmm_hg)
         elseif algorithm == 9
-            push!(benchmark, UnsupervisedClustering.gmm_shrunk)
+            push!(benchmark, :gmm_shrunk)
         elseif algorithm == 10
-            push!(benchmark, UnsupervisedClustering.gmm_ms_shrunk)
+            push!(benchmark, :gmm_ms_shrunk)
         elseif algorithm == 11
-            push!(benchmark, UnsupervisedClustering.gmm_rs_shrunk)
+            push!(benchmark, :gmm_rs_shrunk)
         elseif algorithm == 12
-            push!(benchmark, UnsupervisedClustering.gmm_hg_shrunk)
+            push!(benchmark, :gmm_hg_shrunk)
         elseif algorithm == 13
-            push!(benchmark, UnsupervisedClustering.gmm_oas)
+            push!(benchmark, :gmm_oas)
         elseif algorithm == 14
-            push!(benchmark, UnsupervisedClustering.gmm_ms_oas)
+            push!(benchmark, :gmm_ms_oas)
         elseif algorithm == 15
-            push!(benchmark, UnsupervisedClustering.gmm_rs_oas)
+            push!(benchmark, :gmm_rs_oas)
         elseif algorithm == 16
-            push!(benchmark, UnsupervisedClustering.gmm_hg_oas)
+            push!(benchmark, :gmm_hg_oas)
         elseif algorithm == 17
-            push!(benchmark, UnsupervisedClustering.gmm_ledoitwolf)
+            push!(benchmark, :gmm_ledoitwolf)
         elseif algorithm == 18
-            push!(benchmark, UnsupervisedClustering.gmm_ms_ledoitwolf)
+            push!(benchmark, :gmm_ms_ledoitwolf)
         elseif algorithm == 19
-            push!(benchmark, UnsupervisedClustering.gmm_rs_ledoitwolf)
+            push!(benchmark, :gmm_rs_ledoitwolf)
         elseif algorithm == 20
-            push!(benchmark, UnsupervisedClustering.gmm_hg_ledoitwolf)
+            push!(benchmark, :gmm_hg_ledoitwolf)
         end
     end
 
@@ -157,7 +159,7 @@ function run(options::Dict{String, Any})
 
     filename = "[$k_str]-[$c_str]-[$d_str]-[$i_str]-$timestamp"
 
-    # precompile 
+    # precompile
     run(benchmark, 3, 2, -0.26, 1)
     clean!(benchmark)
 
@@ -180,69 +182,6 @@ function run(options::Dict{String, Any})
             run(benchmark, uci_datasets[dataset], options["i"])
             save(benchmark, joinpath(".", "results"), filename)
         end
-
-    #         "cervical_cancer",
-    #         "economics",
-    #         "liver-disorders",
-            
-    #         "glass",
-    #         "heart",
-            
-    #         "heart-disease",
-    #         "user_knowledge_modeling",
-    #         "heart_failure_clinical",
-            
-    #         "breast-cancer-wisconsin",
-    #         "breast",
-    #         "congressional-voting",
-            
-    #         "pima-indians-diabetes",
-    #         "scadi",
-    #         "absenteeism_at_work",
-    #         "banknote_authentication",
-    #         "south_german_credit",
-    #         # "circles_2d",
-            
-    #         "dow_jones_index",
-         
-    #         "parkinson_disease_spiral",
-    #         "winequality_red",
-    #         "sonar",
-    #         # "simple_2d",
-    #         "abalone",
-    #         # "spheres_3d",
-    #         "page-blocks"
-    #         # "libras",
-    #         # "winequality_white",
-
-    #         # "shill_bidding",
-    #         # 
-    #         # "spam",
-   
-    #         # "egg",
-    #         # 
-    #         # 
-    #         # 
-    #         # 
-    #         # "eeg-eye-state",
-    #         # "htru2",
-    #         # "anuran_calls",
-    #         # "gas_turbine_emission",
-    #         # "activity_recognition",
-    #         # "skin",
-    #         # "skin-segmentation",
-    #         # "gesture_phase_segmentation",
-    #         # "credit",
-    #         # "urban-gb",
-    #         # "gas-sensor",
-    #         # "3d-road-network",
-    #         # "sensorless-drive-diagnosis",
-    #         # "isolet",
-    #         # "har",
-    #         # "gisette",
-    
-    #         # "urban-gb"
-    # ]
     end
 end
 

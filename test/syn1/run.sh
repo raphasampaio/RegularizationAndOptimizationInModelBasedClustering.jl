@@ -10,25 +10,25 @@ export JULIA_INSTALL="/tmp/julia/install"
 export JULIA_DEPOT_PATH="/tmp/julia/.julia"
 
 wget https://raw.githubusercontent.com/abelsiqueira/jill/master/jill.sh
-bash jill.sh --no-confirm -v 1.6.7
+bash jill.sh --no-confirm -v 1.8.4
 
 export PATH=$PATH:"/tmp/julia/install"
-export JULIA_167="/tmp/julia/install/julia"
+export JULIA_184="/tmp/julia/install/julia"
 
-which $JULIA_167
-$JULIA_167 --version
+which $JULIA_184
+$JULIA_184 --version
 
 cd RegularizationAndGlobalOptimizationInModelBasedClustering.jl
 chmod +x run.sh
 
 ./run.sh -k=[]
 
-./run.sh -i=[1,9]  -c=[-0.1] &
-./run.sh -i=[2,10] -c=[-0.1] &
-./run.sh -i=[3,11] -c=[-0.1] &
-./run.sh -i=[4,12] -c=[-0.1] &
-./run.sh -i=[5,13] -c=[-0.1] &
-./run.sh -i=[6,14] -c=[-0.1] &
-./run.sh -i=[7,15] -c=[-0.1] &
-./run.sh -i=[8,16] -c=[-0.1] &
+./run.sh -i=[3] -c=[-0.26] &
+./run.sh -i=[3] -c=[-0.1]  &
+./run.sh -i=[3] -c=[0.01]  &
+./run.sh -i=[3] -c=[0.21]  &
+./run.sh -i=[4] -c=[-0.26] &
+./run.sh -i=[4] -c=[-0.1]  &
+./run.sh -i=[4] -c=[0.01]  &
+./run.sh -i=[4] -c=[0.21]  &
 wait

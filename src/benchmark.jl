@@ -1,7 +1,7 @@
 mutable struct Benchmark
     syn::DataFrame
     uci::DataFrame
-    algorithms::Vector{Function}
+    symbols::Vector{Symbol}
 
     function Benchmark()
         syn = DataFrame(
@@ -29,8 +29,8 @@ mutable struct Benchmark
     end
 end
 
-function Base.push!(benchmark::Benchmark, algorithm::Function)
-    push!(benchmark.algorithms, algorithm)
+function Base.push!(benchmark::Benchmark, symbol::Symbol)
+    push!(benchmark.symbols, symbol)
     return nothing
 end
 
@@ -40,38 +40,94 @@ function clean!(benchmark::Benchmark)
     return nothing
 end
 
+function get_algorithm(algorithm::Symbol, n::Int, d::Int, seed::Int = 123)
+    kmeans = Kmeans(rng = Xoshiro(seed))
+    gmm = GMM(estimator = EmpiricalCovarianceMatrix(n, d), rng = Xoshiro(seed))
+    gmm_shrunk = GMM(estimator = ShrunkCovarianceMatrix(n, d), rng = Xoshiro(seed))
+    gmm_oas = GMM(estimator = OASCovarianceMatrix(n, d), rng = Xoshiro(seed))
+    gmm_lw = GMM(estimator = LedoitWolfCovarianceMatrix(n, d), rng = Xoshiro(seed))
+
+    return if algorithm == :kmeans
+        kmeans
+    elseif algorithm == :kmeans_ms
+        MultiStart(local_search = kmeans)
+    elseif algorithm == :kmeans_rs
+        RandomSwap(local_search = kmeans)
+    elseif algorithm == :kmeans_hg
+        GeneticAlgorithm(local_search = kmeans)
+    elseif algorithm == :gmm
+        gmm
+    elseif algorithm == :gmm_ms
+        MultiStart(local_search = gmm)
+    elseif algorithm == :gmm_rs
+        RandomSwap(local_search = gmm)
+    elseif algorithm == :gmm_hg
+        GeneticAlgorithm(local_search = gmm)
+    elseif algorithm == :gmm_shrunk
+        gmm_shrunk
+    elseif algorithm == :gmm_ms_shrunk
+        MultiStart(local_search = gmm_shrunk)
+    elseif algorithm == :gmm_rs_shrunk
+        RandomSwap(local_search = gmm_shrunk)
+    elseif algorithm == :gmm_hg_shrunk
+        GeneticAlgorithm(local_search = gmm_shrunk)
+    elseif algorithm == :gmm_oas
+        gmm_oas
+    elseif algorithm == :gmm_ms_oas
+        MultiStart(local_search = gmm_oas)
+    elseif algorithm == :gmm_rs_oas
+        RandomSwap(local_search = gmm_oas)
+    elseif algorithm == :gmm_hg_oas
+        GeneticAlgorithm(local_search = gmm_oas)
+    elseif algorithm == :gmm_ledoitwolf
+        gmm_lw
+    elseif algorithm == :gmm_ms_ledoitwolf
+        MultiStart(local_search = gmm_lw)
+    elseif algorithm == :gmm_rs_ledoitwolf
+        RandomSwap(local_search = gmm_lw)
+    elseif algorithm == :gmm_hg_ledoitwolf
+        GeneticAlgorithm(local_search = gmm_lw)
+    else
+        error("algorithm not found")
+    end
+end
+
 function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
-    for algorithm in benchmark.algorithms
+    for symbol in benchmark.symbols
         file = "$(k)_$(d)_$(c)_$(i)"
         dataset = Dataset(joinpath("data", "$file.csv"))
+        _, n = size(dataset.X)
+
+        algorithm = get_algorithm(symbol, n, d, 123)
 
         Random.seed!(1)
-        t = @elapsed result = algorithm(dataset.X, dataset.k)
+        t = @elapsed result = UnsupervisedClustering.train(algorithm, dataset.X, dataset.k)
         ari = Clustering.randindex(dataset.expected, result.assignments)[1]
-        obj = result.totalcost
+        obj = result.objective
 
-        println("$file, $algorithm, $ari, $obj, $t")
+        @printf("%s, %s, %.2f, %.2f\n", file, symbol, ari, t)
 
-        push!(benchmark.syn, (Symbol(algorithm), k, c, d, i, ari, obj, t))
+        push!(benchmark.syn, (symbol, k, c, d, i, ari, obj, t))
     end
 end
 
 function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
-    for algorithm in benchmark.algorithms
+    for symbol in benchmark.symbols
         dataset = Dataset(joinpath("data", "uci", "$file.csv"))
-        n = size(dataset.X, 1)
+        n, d = size(dataset.X)
         k = dataset.k
-        d = size(dataset.X, 2)
 
         for seed in seeds
-            Random.seed!(seed)
-            t = @elapsed result = algorithm(dataset.X, dataset.k)
-            ari = Clustering.randindex(dataset.expected, result.assignments)[1]
-            obj = result.totalcost
+            algorithm = get_algorithm(symbol, n, d, seed)
 
-            println("$file, $algorithm, $seed, $ari, $obj, $t")
+            Random.seed!(seed)
+            t = @elapsed result = UnsupervisedClustering.train(algorithm, dataset.X, dataset.k)
+            ari = Clustering.randindex(dataset.expected, result.assignments)[1]
+            obj = result.objective
+
+            @printf("%s, %s, %d, %.2f, %.2f\n", file, symbol, seed, ari, t)
             
-            push!(benchmark.uci, (Symbol(algorithm), Symbol(file), n, k, d, seed, ari, obj, t))
+            push!(benchmark.uci, (symbol, Symbol(file), n, k, d, seed, ari, obj, t))
         end
     end
 end
