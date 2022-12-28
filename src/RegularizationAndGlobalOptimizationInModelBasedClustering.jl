@@ -95,7 +95,7 @@ include("dataset.jl")
 include("postprocessing.jl")
 
 function run(options::Dict{String, Any})
-    println("Running on a $(Sys.cpu_summary())")
+    println(Sys.cpu_summary())
 
     benchmark = Benchmark()
 
