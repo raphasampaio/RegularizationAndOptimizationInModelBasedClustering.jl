@@ -23,14 +23,4 @@ chmod +x run.sh
 
 ./run.sh -k=[]
 
-./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[11] -k=[] --uci --datasets=[11] &
-./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[12] -k=[] --uci --datasets=[11] &
-./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[13] -k=[] --uci --datasets=[11] &
-./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[14] -k=[] --uci --datasets=[11] &
-./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[15] -k=[] --uci --datasets=[11] &
-./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[16] -k=[] --uci --datasets=[11] &
-./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[17] -k=[] --uci --datasets=[11] &
-./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[18] -k=[] --uci --datasets=[11] &
-./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[19] -k=[] --uci --datasets=[11] &
-./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[20] -k=[] --uci --datasets=[11] &
-wait
+./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[6,7,8,9,10] -k=[] --uci --datasets=[14]
