@@ -248,7 +248,7 @@ function wilcoxon()
 \\end{table}
 """)
 
-results = CSV.read(joinpath("results", "uci-v7.csv"), DataFrame)
+results = CSV.read(joinpath("results", "uci-v8.csv"), DataFrame)
 sort!(results, [:algorithm, :dataset, :i])
 
 println("""
