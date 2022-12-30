@@ -195,9 +195,11 @@ function wilcoxon()
     println("""
 \\begin{table}[htbp]
 \\centering
+\\scalebox{0.9}
+{
 \\begin{tabular}{l@{\\hspace{1cm}}l}
 \\toprule
-\\textbf{Algorithm} & \\textbf{p-value} \\\\
+\\textbf{Pair of methods} & \\textbf{p-value} \\\\
 \\midrule""")
 
     for algorithm in ["gmm", "gmm_oas", "gmm_ledoitwolf"]
@@ -206,13 +208,14 @@ function wilcoxon()
 
         v = @sprintf "%.2E" pvalue(SignedRankTest(df1.ari, df2.ari))
         str = replace(v, "E" => "\\times 10^{") * "}"
-        println("$(translation[algorithm]) & \$$str\$ \\\\")
+        println("GMM Shrunk -- $(translation[algorithm]) & \$$str\$ \\\\")
     end
 
     println("""
 \\bottomrule
 \\end{tabular}
-\\caption{TODO}
+}
+\\caption{Impact of regularization on GMM: Pairwise Wilcoxon tests}
 \\label{tab:wilcoxon1}
 \\end{table}
 """)
@@ -220,6 +223,8 @@ function wilcoxon()
     println("""
 \\begin{table}[htbp]
 \\centering
+\\scalebox{0.9}
+{
 \\begin{tabular}{l@{\\hspace{1cm}}l}
 \\toprule
 \\textbf{Algorithm} & \\textbf{p-value} \\\\
@@ -231,14 +236,46 @@ function wilcoxon()
 
         v = @sprintf "%.2E" pvalue(SignedRankTest(df1.ari, df2.ari))
         str = replace(v, "E" => "\\times 10^{") * "}"
-        println("$(translation[algorithm]) & \$$str\$ \\\\")
+        println("GMM HG Shrunk -- $(translation[algorithm]) & \$$str\$ \\\\")
     end
 
     println("""
 \\bottomrule
 \\end{tabular}
-\\caption{TODO}
+}
+\\caption{Comparison with k-means, k-means HG and GMM: Pairwise Wilcoxon tests}
 \\label{tab:wilcoxon2}
+\\end{table}
+""")
+
+results = CSV.read(joinpath("results", "uci-v7.csv"), DataFrame)
+sort!(results, [:algorithm, :dataset, :i])
+
+println("""
+\\begin{table}[htbp]
+\\centering
+\\scalebox{0.9}
+{
+\\begin{tabular}{l@{\\hspace{1cm}}l}
+\\toprule
+\\textbf{Algorithm} & \\textbf{p-value} \\\\
+\\midrule""")
+
+    for algorithm in ["kmeans", "kmeans_hg", "gmm", "gmm_ms", "gmm_rs", "gmm_hg", "gmm_shrunk", "gmm_ms_shrunk", "gmm_rs_shrunk"]
+        df1 = filter(row -> row.algorithm == algorithm, results)
+        df2 = filter(row -> row.algorithm == "gmm_hg_shrunk", results)
+
+        v = @sprintf "%.2E" pvalue(SignedRankTest(df1.ari, df2.ari))
+        str = replace(v, "E" => "\\times 10^{") * "}"
+        println("GMM HG Shrunk -- $(translation[algorithm]) & \$$str\$ \\\\")
+    end
+
+    println("""
+\\bottomrule
+\\end{tabular}
+}
+\\caption{Comparison with k-means, k-means HG and GMM variations: Pairwise Wilcoxon tests}
+\\label{tab:wilcoxon3}
 \\end{table}
 """)
 
