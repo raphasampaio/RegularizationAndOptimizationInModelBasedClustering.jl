@@ -117,10 +117,78 @@ println(raw"""
 \label{uci_ari}
 \end{table}
 """)
+
+println(raw"""
+\begin{table}[htbp]
+\centering
+\scalebox{0.9}
+{
+\begin{tabular}{@{}c|cccccccccc@{}}
+\toprule
+\multirow{3}{*}{\#} & k-means & k-means & GMM & GMM & GMM & GMM & GMM   & GMM    & GMM    & GMM    \\
+                    &         & HG      &     & MS  & RS  & HG  &        & MS     & RS     & HG     \\
+                    &         &         &     &     &     &     & Shrunk & Shrunk & Shrunk & Shrunk \\ \midrule 
+""")
+
+    for (i, dataset) in enumerate(sort(uci_datasets))
+        print("\\texttt{$('@' + i)}")
+
+        data = Vector{Float64}()
+        for algorithm in algorithms
+            df = filter(row -> row.dataset == dataset && row.algorithm == algorithm, results)
+            push!(data, Statistics.mean(df.t))
+        end
+
+        min, min_j = findmin(data)
+        max, max_j = findmax(data)
+
+        for j in eachindex(data)
+            v = @sprintf "%.2f" data[j]
+            hex = get_greyscale(data[j], min, max)
+            if j == max_j || max == data[j]
+                print(" & \\cellcolor[HTML]{$hex}\\textbf{$v}")
+            else
+                print(" & \\cellcolor[HTML]{$hex}$v")
+            end
+        end
+        println(" \\\\")
+    end
+    print(raw"""
+\midrule
+\multicolumn{1}{c|}{Avg.}""")
+
+data = Vector{Float64}()
+for algorithm in algorithms
+    df = filter(row -> row.algorithm == algorithm, results)
+    push!(data, Statistics.mean(df.t))
+end
+
+min, min_j = findmin(data)
+max, max_j = findmax(data)
+
+for j in eachindex(data)
+    v = @sprintf "%.2f" data[j]
+    hex = get_greyscale(data[j], min, max)
+    if j == max_j || max == data[j]
+        print(" & \\cellcolor[HTML]{$hex}\\textbf{$v}")
+    else
+        print(" & \\cellcolor[HTML]{$hex}$v")
+    end
+end
+println(" \\\\")
+
+println(raw"""
+\bottomrule
+\end{tabular}
+}
+\caption{CPU in UCI datasets for multiple methods}
+\label{uci_cpu}
+\end{table}
+""")
 end
 
 function wilcoxon()
-    results = CSV.read(joinpath("results", "synthetical-v7.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "synthetical-v8.csv"), DataFrame)
     sort!(results, [:algorithm, :k, :c, :d, :i])
     # filter!(row -> row.k == 10 && row.c == 0.01, results)
 
@@ -203,7 +271,7 @@ function cpu_time()
         "gmm_hg_shrunk" => "%.2f"
     )
 
-    results = CSV.read(joinpath("results", "synthetical-v7.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "synthetical-v8.csv"), DataFrame)
     sort!(results, [:algorithm, :k, :c, :d, :i])
 
 println(raw"""
