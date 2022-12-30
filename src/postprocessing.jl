@@ -25,7 +25,7 @@ function uci()
         "gmm_hg_shrunk"
     ]
 
-    results = CSV.read(joinpath("results", "uci-v7.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "uci-v8.csv"), DataFrame)
 
     println(raw"""
 \begin{table}[htbp]
@@ -45,7 +45,7 @@ println(raw"""
 \bottomrule
 \end{tabular}
 }
-\caption{UCI datasets labels and dimensions.}
+\caption{UCI datasets labels and dimensions}
 \label{uci_dimensions}
 \end{table}
 """)
@@ -113,10 +113,23 @@ println(raw"""
 \bottomrule
 \end{tabular}
 }
-\caption{ARI in UCI datasets for multiple methods}
+\caption{ARI of the UCI datasets for multiple methods}
 \label{uci_ari}
 \end{table}
 """)
+
+    formats = Dict(
+        "kmeans" => "%.2f", 
+        "kmeans_hg" => "%.2f",
+        "gmm" => "%.2f",
+        "gmm_ms" => "%.2f",
+        "gmm_rs" => "%.2f",
+        "gmm_hg" => "%.2f",
+        "gmm_shrunk" => "%.2f",
+        "gmm_ms_shrunk" => "%.2f",
+        "gmm_rs_shrunk" => "%.2f",
+        "gmm_hg_shrunk" => "%.2f"
+    )
 
 println(raw"""
 \begin{table}[htbp]
@@ -127,61 +140,34 @@ println(raw"""
 \toprule
 \multirow{3}{*}{\#} & k-means & k-means & GMM & GMM & GMM & GMM & GMM   & GMM    & GMM    & GMM    \\
                     &         & HG      &     & MS  & RS  & HG  &        & MS     & RS     & HG     \\
-                    &         &         &     &     &     &     & Shrunk & Shrunk & Shrunk & Shrunk \\ \midrule 
-""")
+                    &         &         &     &     &     &     & Shrunk & Shrunk & Shrunk & Shrunk \\ \midrule""")
 
     for (i, dataset) in enumerate(sort(uci_datasets))
         print("\\texttt{$('@' + i)}")
 
-        data = Vector{Float64}()
         for algorithm in algorithms
             df = filter(row -> row.dataset == dataset && row.algorithm == algorithm, results)
-            push!(data, Statistics.mean(df.t))
+            v = to_string(ceil(Statistics.mean(df.t); digits = 2), formats[algorithm]) 
+            print("& \$$v\$ ")
         end
-
-        min, min_j = findmin(data)
-        max, max_j = findmax(data)
-
-        for j in eachindex(data)
-            v = @sprintf "%.2f" data[j]
-            hex = get_greyscale(data[j], min, max)
-            if j == max_j || max == data[j]
-                print(" & \\cellcolor[HTML]{$hex}\\textbf{$v}")
-            else
-                print(" & \\cellcolor[HTML]{$hex}$v")
-            end
-        end
-        println(" \\\\")
+        println("\\\\")
     end
+
     print(raw"""
 \midrule
 \multicolumn{1}{c|}{Avg.}""")
 
-data = Vector{Float64}()
 for algorithm in algorithms
     df = filter(row -> row.algorithm == algorithm, results)
-    push!(data, Statistics.mean(df.t))
+    v = to_string(ceil(Statistics.mean(df.t); digits = 2), formats[algorithm]) 
+    print("& \$$v\$ ")
 end
-
-min, min_j = findmin(data)
-max, max_j = findmax(data)
-
-for j in eachindex(data)
-    v = @sprintf "%.2f" data[j]
-    hex = get_greyscale(data[j], min, max)
-    if j == max_j || max == data[j]
-        print(" & \\cellcolor[HTML]{$hex}\\textbf{$v}")
-    else
-        print(" & \\cellcolor[HTML]{$hex}$v")
-    end
-end
-println(" \\\\")
 
 println(raw"""
-\bottomrule
+\\ \bottomrule
 \end{tabular}
 }
-\caption{CPU in UCI datasets for multiple methods}
+\caption{CPU in second for each UCI dataset for multiple methods}
 \label{uci_cpu}
 \end{table}
 """)
@@ -296,7 +282,7 @@ function cpu_time()
     ]
 
     formats = Dict(
-        "kmeans" => "%.3f", 
+        "kmeans" => "%.2f", 
         "kmeans_hg" => "%.2f",
         "gmm" => "%.2f",
         "gmm_ms" => "%.2f",
@@ -326,7 +312,7 @@ for k in [3, 10, 20]
     print("$k ")
     for algorithm in algorithms
         df = filter(row -> row.k == k && row.algorithm == algorithm, results)
-        v = to_string(Statistics.mean(df.t), formats[algorithm]) 
+        v = to_string(ceil(Statistics.mean(df.t); digits = 2), formats[algorithm]) 
         print("& \$$v\$ ")
     end
     println("\\\\")
@@ -336,7 +322,7 @@ println("\\midrule")
 print("Avg. ")
 for algorithm in algorithms
     df = filter(row -> row.algorithm == algorithm, results)
-    v = to_string(Statistics.mean(df.t), formats[algorithm]) 
+    v = to_string(ceil(Statistics.mean(df.t); digits = 2), formats[algorithm]) 
     print("& \$$v\$ ")
 end
 println("\\\\ \\bottomrule")
