@@ -113,7 +113,7 @@ println(raw"""
 \bottomrule
 \end{tabular}
 }
-\caption{ARI of the UCI datasets for multiple methods}
+\caption{Accuracy (ARI) comparison on the UCI datasets}
 \label{uci_ari}
 \end{table}
 """)
@@ -167,7 +167,7 @@ println(raw"""
 \\ \bottomrule
 \end{tabular}
 }
-\caption{CPU in second for each UCI dataset for multiple methods}
+\caption{CPU time (s) comparison on the UCI datasets}
 \label{uci_cpu}
 \end{table}
 """)
