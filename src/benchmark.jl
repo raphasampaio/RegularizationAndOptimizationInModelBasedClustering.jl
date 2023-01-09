@@ -101,7 +101,7 @@ function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
 
         algorithm = get_algorithm(symbol, n, d, 123)
 
-        t = @elapsed result = UnsupervisedClustering.train(algorithm, dataset.X, dataset.k)
+        t = @elapsed result = UnsupervisedClustering.fit(algorithm, dataset.X, dataset.k)
         ari = Clustering.randindex(dataset.expected, result.assignments)[1]
         obj = result.objective
 
@@ -120,7 +120,7 @@ function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
         for seed in seeds
             algorithm = get_algorithm(symbol, n, d, seed)
 
-            t = @elapsed result = UnsupervisedClustering.train(algorithm, dataset.X, dataset.k)
+            t = @elapsed result = UnsupervisedClustering.fit(algorithm, dataset.X, dataset.k)
             ari = Clustering.randindex(dataset.expected, result.assignments)[1]
             obj = result.objective
 
