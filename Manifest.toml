@@ -580,9 +580,7 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [[deps.UnsupervisedClustering]]
 deps = ["Distances", "Hungarian", "LinearAlgebra", "LogExpFunctions", "Printf", "Random", "RegularizedCovarianceMatrices", "Statistics", "StatsBase"]
-git-tree-sha1 = "c3667d86d134210caa985d668dad13d70e3919a7"
-repo-rev = "main"
-repo-url = "https://github.com/raphasampaio/UnsupervisedClustering.jl.git"
+git-tree-sha1 = "bea515b8589504c5e0d77e9d85d3958cb71638a8"
 uuid = "c6b3b713-2a2b-4e07-a35c-d57ac4f46186"
 version = "0.1.0"
 
