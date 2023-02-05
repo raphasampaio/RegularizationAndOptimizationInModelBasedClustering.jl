@@ -25,7 +25,7 @@ function uci()
         "gmm_hg_shrunk"
     ]
 
-    results = CSV.read(joinpath("results", "uci-v8.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "uci.csv"), DataFrame)
 
     println(raw"""
 \begin{table}[htbp]
@@ -174,7 +174,7 @@ println(raw"""
 end
 
 function wilcoxon()
-    results = CSV.read(joinpath("results", "synthetical-v8.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "synthetical.csv"), DataFrame)
     sort!(results, [:algorithm, :k, :c, :d, :i])
     # filter!(row -> row.k == 10 && row.c == 0.01, results)
 
@@ -234,7 +234,7 @@ function wilcoxon()
 \\end{table}
 """)
 
-results = CSV.read(joinpath("results", "uci-v8.csv"), DataFrame)
+results = CSV.read(joinpath("results", "uci.csv"), DataFrame)
 sort!(results, [:algorithm, :dataset, :i])
 
 println("""
@@ -294,7 +294,7 @@ function cpu_time()
         "gmm_hg_shrunk" => "%.2f"
     )
 
-    results = CSV.read(joinpath("results", "synthetical-v8.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "synthetical.csv"), DataFrame)
     sort!(results, [:algorithm, :k, :c, :d, :i])
 
 println(raw"""
