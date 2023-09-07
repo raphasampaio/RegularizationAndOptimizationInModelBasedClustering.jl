@@ -3,4 +3,4 @@
 SET BASEPATH=%~dp0
 SET REVISE_PATH="%BASEPATH%\revise"
 
-%JULIA_184% --color=yes --project=%REVISE_PATH% --load=%REVISE_PATH%\revise.jl
+CALL "%JULIA_184%" --color=yes --project=%REVISE_PATH% --load=%REVISE_PATH%\revise.jl

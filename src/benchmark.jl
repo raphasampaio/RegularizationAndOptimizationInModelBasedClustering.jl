@@ -11,6 +11,12 @@ mutable struct Benchmark
             d = Int[],
             i = Int[],
             ari = Float64[],
+            nmi = Float64[],
+            ci = Int[],
+            mirkins_index = Float64[],
+            huberts_index = Float64[],
+            varinfo = Float64[],
+            vmeasure = Float64[],
             obj = Float64[],
             t = Float64[],
         )
@@ -22,6 +28,12 @@ mutable struct Benchmark
             d = Int[],
             i = Int[],
             ari = Float64[],
+            nmi = Float64[],
+            ci = Int[],
+            mirkins_index = Float64[],
+            huberts_index = Float64[],
+            varinfo = Float64[],
+            vmeasure = Float64[],
             obj = Float64[],
             t = Float64[],
         )
@@ -102,12 +114,29 @@ function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
         algorithm = get_algorithm(symbol, n, d, 123)
 
         t = @elapsed result = UnsupervisedClustering.fit(algorithm, dataset.X, dataset.k)
-        ari = Clustering.randindex(dataset.expected, result.assignments)[1]
+        evaluation = Evaluation(dataset.X, dataset.k, dataset.expected, result.assignments)
         obj = result.objective
 
-        @printf("%s, %s, %.2f, %.2f\n", file, symbol, ari, t)
+        @printf("%s, %s, %.2f, %.2f, %d, %.2f\n", file, symbol, evaluation.ari, evaluation.nmi, evaluation.ci, t)
 
-        push!(benchmark.syn, (symbol, k, c, d, i, ari, obj, t))
+        push!(benchmark.syn, 
+            (
+                symbol,
+                k,
+                c,
+                d,
+                i,
+                evaluation.ari,
+                evaluation.nmi,
+                evaluation.ci,
+                evaluation.mirkins_index,
+                evaluation.huberts_index,
+                evaluation.varinfo,
+                evaluation.vmeasure,
+                obj,
+                t
+            )
+        )
     end
 end
 
@@ -121,12 +150,30 @@ function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
             algorithm = get_algorithm(symbol, n, d, seed)
 
             t = @elapsed result = UnsupervisedClustering.fit(algorithm, dataset.X, dataset.k)
-            ari = Clustering.randindex(dataset.expected, result.assignments)[1]
+            evaluation = Evaluation(dataset.X, dataset.k, dataset.expected, result.assignments)
             obj = result.objective
 
-            @printf("%s, %s, %d, %.2f, %.2f\n", file, symbol, seed, ari, t)
+            @printf("%s, %s, %d, %.2f, %.2f, %d, %.2f\n", file, symbol, seed, evaluation.ari, evaluation.nmi, evaluation.ci, t)
             
-            push!(benchmark.uci, (symbol, Symbol(file), n, k, d, seed, ari, obj, t))
+            push!(benchmark.uci, 
+                (
+                    symbol,
+                    Symbol(file),
+                    n,
+                    k,
+                    d,
+                    seed,
+                    evaluation.ari,
+                    evaluation.nmi,
+                    evaluation.ci,
+                    evaluation.mirkins_index,
+                    evaluation.huberts_index,
+                    evaluation.varinfo,
+                    evaluation.vmeasure,
+                    obj,
+                    t
+                )
+            )
         end
     end
 end

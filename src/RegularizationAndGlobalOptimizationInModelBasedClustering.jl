@@ -7,6 +7,7 @@ using CSV
 using DataFrames
 using DelimitedFiles
 using HypothesisTests
+using LinearAlgebra
 using RegularizedCovarianceMatrices
 using Printf
 using UnsupervisedClustering
@@ -90,6 +91,7 @@ function initialize()
     return nothing
 end
 
+include("evaluation.jl")
 include("benchmark.jl")
 include("dataset.jl")
 include("postprocessing.jl")
