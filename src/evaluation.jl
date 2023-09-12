@@ -1,28 +1,8 @@
-# function van_dongen_criterion(labels_true::Vector{Int}, labels_pred::Vector{Int})
-#     n = length(labels_true)
-#     @show count_pairs = StatsBase.countmap(zip(labels_true, labels_pred))
-#     @show unique(labels_pred)
-#     tp = sum(maximum(count_pairs[:, i]) for i in unique(labels_pred))
-#     fp = sum(count_pairs[i, j] - maximum(count_pairs[i, :]) for i in unique(labels_true), j in unique(labels_pred))
-#     fn = sum(count_pairs[i, j] - maximum(count_pairs[:, j]) for i in unique(labels_true), j in unique(labels_pred))
-#     tn = n - tp - fp - fn
-#     return (tp + tn) / (tp + fp + fn + tn)
-# end
+function orphans_count(centroids_a, centroids_b)
+    k = length(centroids_a)
 
-# function accuracy_score(y_true::Vector{Int}, y_pred::Vector{Int})
-#     n = length(y_true)
-#     correct = 0
-#     for (yt, yp) in zip(y_true, y_pred)
-#         if yt == yp
-#             correct += 1
-#         end
-#     end
-#     return correct / n
-# end
-
-function orphans_count(data::AbstractMatrix{<:Real}, k::Integer, a::AbstractVector{<:Integer}, b::AbstractVector{<:Integer})
-    centroids_a = [mean(data[a .== i, :], dims = 1) for i in 1:k]
-    centroids_b = [mean(data[b .== i, :], dims = 1) for i in 1:k]
+    # centroids_a = [mean(data[a .== i, :], dims = 1) for i in 1:k]
+    # centroids_b = [mean(data[b .== i, :], dims = 1) for i in 1:k]
 
     # find nearest centroids 
     nearest_centroids = zeros(Int, k)
@@ -48,13 +28,13 @@ function orphans_count(data::AbstractMatrix{<:Real}, k::Integer, a::AbstractVect
     return sum(orphans)
 end
 
-function centroid_index(data::AbstractMatrix{<:Real}, k::Integer, a::AbstractVector{<:Integer}, b::AbstractVector{<:Integer})
-    centroid_index1 = orphans_count(data, k, a, b)
-    centroid_index2 = orphans_count(data, k, b, a)
+function centroid_index(centroids_a, centroids_b)
+    centroid_index1 = orphans_count(centroids_a, centroids_b)
+    centroid_index2 = orphans_count(centroids_b, centroids_a)
     return max(centroid_index1, centroid_index2)
 end
 
-struct Evaluation
+Base.@kwdef struct Evaluation
     ari::Float64
     nmi::Float64
     ci::Int
@@ -63,27 +43,42 @@ struct Evaluation
     huberts_index::Float64
     varinfo::Float64
     vmeasure::Float64
+end
     
-    function Evaluation(data::AbstractMatrix{<:Real}, k::Integer, a::AbstractVector{<:Integer}, b::AbstractVector{<:Integer})
-        ri = Clustering.randindex(a, b)
+function Evaluation(dataset::Dataset, result::UnsupervisedClustering.KmeansResult)
+    k = dataset.k
 
-        ari = ri[1]
-        nmi = Clustering.mutualinfo(a, b, normed = true)
-        ci = centroid_index(data, k, a, b)
+    ri = Clustering.randindex(dataset.expected, result.assignments)
 
-        mirkins_index = ri[3]
-        huberts_index = ri[4]
-        varinfo = Clustering.varinfo(a, b)
-        vmeasure = Clustering.vmeasure(a, b)
+    centroids_a = [mean(dataset.X[dataset.expected .== i, :], dims = 1) for i in 1:k]
+    centroids_b = [result.centers[:, i]' for i in 1:k]
 
-        return new(
-            ari, 
-            nmi,
-            ci,
-            mirkins_index,
-            huberts_index,
-            varinfo,
-            vmeasure,
-        )
-    end
+    return Evaluation(
+        ari = ri[1], 
+        nmi = Clustering.mutualinfo(dataset.expected, result.assignments, normed = true),
+        ci = centroid_index(centroids_a, centroids_b),
+        mirkins_index = ri[3],
+        huberts_index = ri[4],
+        varinfo = Clustering.varinfo(dataset.expected, result.assignments),
+        vmeasure = Clustering.vmeasure(dataset.expected, result.assignments),
+    )
+end
+
+function Evaluation(dataset::Dataset, result::UnsupervisedClustering.GMMResult)
+    k = dataset.k
+
+    ri = Clustering.randindex(dataset.expected, result.assignments)
+
+    centroids_a = [mean(dataset.X[dataset.expected .== i, :], dims = 1) for i in 1:k]
+    centroids_b = [result.centers[i]' for i in 1:k]
+
+    return Evaluation(
+        ari = ri[1], 
+        nmi = Clustering.mutualinfo(dataset.expected, result.assignments, normed = true),
+        ci = centroid_index(centroids_a, centroids_b),
+        mirkins_index = ri[3],
+        huberts_index = ri[4],
+        varinfo = Clustering.varinfo(dataset.expected, result.assignments),
+        vmeasure = Clustering.vmeasure(dataset.expected, result.assignments),
+    )
 end

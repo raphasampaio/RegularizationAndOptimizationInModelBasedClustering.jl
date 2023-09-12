@@ -91,9 +91,9 @@ function initialize()
     return nothing
 end
 
+include("dataset.jl")
 include("evaluation.jl")
 include("benchmark.jl")
-include("dataset.jl")
 include("postprocessing.jl")
 
 function run(options::Dict{String, Any})
