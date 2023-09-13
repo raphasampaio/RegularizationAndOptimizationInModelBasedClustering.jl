@@ -12,7 +12,9 @@ mutable struct Benchmark
             i = Int[],
             ari = Float64[],
             nmi = Float64[],
-            ci = Int[],
+            ci_sphere = Int[],
+            ci_ellipsoid = Int[],
+            ci_mixture = Int[],
             mirkins_index = Float64[],
             huberts_index = Float64[],
             varinfo = Float64[],
@@ -29,7 +31,9 @@ mutable struct Benchmark
             i = Int[],
             ari = Float64[],
             nmi = Float64[],
-            ci = Int[],
+            ci_sphere = Int[],
+            ci_ellipsoid = Int[],
+            ci_mixture = Int[],
             mirkins_index = Float64[],
             huberts_index = Float64[],
             varinfo = Float64[],
@@ -117,7 +121,16 @@ function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
         evaluation = Evaluation(dataset, result)
         obj = result.objective
 
-        @printf("%s, %s, %.2f, %.2f, %d, %.2f\n", file, symbol, evaluation.ari, evaluation.nmi, evaluation.ci, t)
+        @printf("%s, %s, %.2f, %.2f, %d, %d, %d, %.2f\n", 
+            file,
+            symbol,
+            evaluation.ari,
+            evaluation.nmi,
+            evaluation.ci_sphere,
+            evaluation.ci_ellipsoid,
+            evaluation.ci_mixture,
+            t
+        )
 
         push!(benchmark.syn, 
             (
@@ -128,7 +141,9 @@ function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
                 i,
                 evaluation.ari,
                 evaluation.nmi,
-                evaluation.ci,
+                evaluation.ci_sphere,
+                evaluation.ci_ellipsoid,
+                evaluation.ci_mixture,
                 evaluation.mirkins_index,
                 evaluation.huberts_index,
                 evaluation.varinfo,
@@ -156,7 +171,17 @@ function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
             evaluation = Evaluation(dataset.X, dataset.k, dataset.expected, result.assignments)
             obj = result.objective
 
-            @printf("%s, %s, %d, %.2f, %.2f, %d, %.2f\n", file, symbol, seed, evaluation.ari, evaluation.nmi, evaluation.ci, t)
+            @printf("%s, %s, %d, %.2f, %.2f, %d, %d, %d, %.2f\n", 
+                file,
+                symbol,
+                seed,
+                evaluation.ari,
+                evaluation.nmi,
+                evaluation.ci_sphere,
+                evaluation.ci_ellipsoid,
+                evaluation.ci_mixture,
+                t
+            )
             
             push!(benchmark.uci, 
                 (
@@ -168,7 +193,9 @@ function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
                     seed,
                     evaluation.ari,
                     evaluation.nmi,
-                    evaluation.ci,
+                    evaluation.ci_sphere,
+                    evaluation.ci_ellipsoid,
+                    evaluation.ci_mixture,
                     evaluation.mirkins_index,
                     evaluation.huberts_index,
                     evaluation.varinfo,
