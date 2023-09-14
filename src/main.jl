@@ -31,7 +31,7 @@ function parse_commandline(args)
             eval_arg = true
             help = ""
         "--datasets"
-            default = [1:20;]
+            default = [1:21;]
             arg_type = Vector{Int}
             eval_arg = true
             help = ""

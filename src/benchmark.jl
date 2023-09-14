@@ -165,10 +165,7 @@ function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
             algorithm = get_algorithm(symbol, n, d, seed)
 
             t = @elapsed result = UnsupervisedClustering.fit(algorithm, dataset.X, dataset.k)
-
-            @show typeof(result.clusters)
-
-            evaluation = Evaluation(dataset.X, dataset.k, dataset.expected, result.assignments)
+            evaluation = Evaluation(dataset, result)
             obj = result.objective
 
             @printf("%s, %s, %d, %.2f, %.2f, %d, %d, %d, %.2f\n", 

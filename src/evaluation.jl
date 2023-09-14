@@ -117,6 +117,27 @@ function centroid_index_ellipsoid(dataset::Dataset, result::UnsupervisedClusteri
     return centroid_index(c_a, sigma_a, c_b, sigma_b)
 end
 
+function Base.mean(a::AbstractVector{<:Number}, b::AbstractVector{<:Number})
+    return (mean(a) + mean(b)) / 2.0
+end
+
+# function centroid_index_ellipsoid_normalized(dataset::Dataset, result::UnsupervisedClustering.GMMResult)
+#     k = dataset.k
+#     n, d = size(dataset.X)
+
+#     sigma_a, c_a = get_covariance_and_center(dataset)
+    
+#     sigma_b = [result.covariances[i] for i in 1:k]
+#     c_b = [result.centers[i] for i in 1:k]
+
+#     m = mean([det(sigma_a[i]) for i in 1:k], [det(sigma_b[i]) for i in 1:k])
+#     value = (m > 0 ? m : 1.0)^(1 / d)
+
+#     sigma_b = [sigma_b[i] for i in 1:k]
+
+#     return centroid_index(c_a, sigma_a, c_b, sigma_b)
+# end
+
 function centroid_index_mixture(dataset::Dataset, result::UnsupervisedClustering.Result)
     if result isa UnsupervisedClustering.KmeansResult
         return centroid_index_sphere(dataset, result)
