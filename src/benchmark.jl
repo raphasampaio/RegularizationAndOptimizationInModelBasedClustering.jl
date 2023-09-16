@@ -14,7 +14,9 @@ mutable struct Benchmark
             nmi = Float64[],
             ci_sphere = Int[],
             ci_ellipsoid = Int[],
+            ci_ellipsoid_norm = Int[],
             ci_mixture = Int[],
+            ci_mixture_norm = Int[],
             mirkins_index = Float64[],
             huberts_index = Float64[],
             varinfo = Float64[],
@@ -33,7 +35,9 @@ mutable struct Benchmark
             nmi = Float64[],
             ci_sphere = Int[],
             ci_ellipsoid = Int[],
+            ci_ellipsoid_norm = Int[],
             ci_mixture = Int[],
+            ci_mixture_norm = Int[],
             mirkins_index = Float64[],
             huberts_index = Float64[],
             varinfo = Float64[],
@@ -59,7 +63,11 @@ end
 function get_algorithm(algorithm::Symbol, n::Int, d::Int, seed::Int = 123)
     kmeans = Kmeans(rng = Xoshiro(seed))
     gmm = GMM(estimator = EmpiricalCovarianceMatrix(n, d), rng = Xoshiro(seed))
-    gmm_shrunk = GMM(estimator = ShrunkCovarianceMatrix(n, d), rng = Xoshiro(seed))
+    gmm_shrunk = GMM(estimator = ShrunkCovarianceMatrix(n, d), rng = Xoshiro(seed),
+        #verbose = true,
+        #tolerance = 1e-2,
+        #max_iterations = 20,
+    )
     gmm_oas = GMM(estimator = OASCovarianceMatrix(n, d), rng = Xoshiro(seed))
     gmm_lw = GMM(estimator = LedoitWolfCovarianceMatrix(n, d), rng = Xoshiro(seed))
 
@@ -86,7 +94,10 @@ function get_algorithm(algorithm::Symbol, n::Int, d::Int, seed::Int = 123)
     elseif algorithm == :gmm_rs_shrunk
         RandomSwap(local_search = gmm_shrunk)
     elseif algorithm == :gmm_hg_shrunk
-        GeneticAlgorithm(local_search = gmm_shrunk)
+        GeneticAlgorithm(
+            local_search = gmm_shrunk,
+            verbose = true,
+        )
     elseif algorithm == :gmm_oas
         gmm_oas
     elseif algorithm == :gmm_ms_oas
@@ -121,14 +132,12 @@ function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
         evaluation = Evaluation(dataset, result)
         obj = result.objective
 
-        @printf("%s, %s, %.2f, %.2f, %d, %d, %d, %.2f\n", 
+        @printf("%s, %s, %.2f, %.2f, %d, %.2f\n", 
             file,
             symbol,
             evaluation.ari,
             evaluation.nmi,
             evaluation.ci_sphere,
-            evaluation.ci_ellipsoid,
-            evaluation.ci_mixture,
             t
         )
 
@@ -143,7 +152,9 @@ function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
                 evaluation.nmi,
                 evaluation.ci_sphere,
                 evaluation.ci_ellipsoid,
+                evaluation.ci_ellipsoid_norm,
                 evaluation.ci_mixture,
+                evaluation.ci_mixture_norm,
                 evaluation.mirkins_index,
                 evaluation.huberts_index,
                 evaluation.varinfo,
@@ -168,15 +179,13 @@ function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
             evaluation = Evaluation(dataset, result)
             obj = result.objective
 
-            @printf("%s, %s, %d, %.2f, %.2f, %d, %d, %d, %.2f\n", 
+            @printf("%s, %s, %d, %.2f, %.2f, %d, %.2f\n", 
                 file,
                 symbol,
                 seed,
                 evaluation.ari,
                 evaluation.nmi,
                 evaluation.ci_sphere,
-                evaluation.ci_ellipsoid,
-                evaluation.ci_mixture,
                 t
             )
             
@@ -192,7 +201,9 @@ function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
                     evaluation.nmi,
                     evaluation.ci_sphere,
                     evaluation.ci_ellipsoid,
+                    evaluation.ci_ellipsoid_norm,
                     evaluation.ci_mixture,
+                    evaluation.ci_mixture_norm,
                     evaluation.mirkins_index,
                     evaluation.huberts_index,
                     evaluation.varinfo,

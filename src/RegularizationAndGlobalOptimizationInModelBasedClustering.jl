@@ -63,6 +63,7 @@ const uci_datasets = [
     "scadi",
     "glass",
     "mnist",
+    "fashion_mnist",
 ]
 
 const uci_translation = Dict(
@@ -87,6 +88,7 @@ const uci_translation = Dict(
     "scadi" => "Scadi",
     "glass" => "Glass",
     "mnist" => "MNIST",
+    "fashion_mnist" => "Fashion MNIST",
 )
 
 function initialize()

@@ -117,26 +117,41 @@ function centroid_index_ellipsoid(dataset::Dataset, result::UnsupervisedClusteri
     return centroid_index(c_a, sigma_a, c_b, sigma_b)
 end
 
-function Base.mean(a::AbstractVector{<:Number}, b::AbstractVector{<:Number})
-    return (mean(a) + mean(b)) / 2.0
+function norm_matrix(m::AbstractMatrix{<:Number})
+    d = size(m, 1)
+    determinant = det(m)
+    return m / ((determinant > 0 ? determinant : 1.0)^(1 / d))
 end
 
-# function centroid_index_ellipsoid_normalized(dataset::Dataset, result::UnsupervisedClustering.GMMResult)
-#     k = dataset.k
-#     n, d = size(dataset.X)
+function centroid_index_ellipsoid_norm(dataset::Dataset, result::UnsupervisedClustering.KmeansResult)
+    k = dataset.k
+    n, d = size(dataset.X)
 
-#     sigma_a, c_a = get_covariance_and_center(dataset)
+    sigma_a, c_a = get_covariance_and_center(dataset)
     
-#     sigma_b = [result.covariances[i] for i in 1:k]
-#     c_b = [result.centers[i] for i in 1:k]
+    sigma_b = [Matrix{Float64}(I, d, d) for i in 1:k]
+    c_b = [result.centers[:, i]' for i in 1:k]
 
-#     m = mean([det(sigma_a[i]) for i in 1:k], [det(sigma_b[i]) for i in 1:k])
-#     value = (m > 0 ? m : 1.0)^(1 / d)
+    sigma_a = [norm_matrix(sigma_a[i]) for i in 1:k]
+    sigma_b = [norm_matrix(sigma_b[i]) for i in 1:k]
 
-#     sigma_b = [sigma_b[i] for i in 1:k]
+    return centroid_index(c_a, sigma_a, c_b, sigma_b)
+end
 
-#     return centroid_index(c_a, sigma_a, c_b, sigma_b)
-# end
+function centroid_index_ellipsoid_norm(dataset::Dataset, result::UnsupervisedClustering.GMMResult)
+    k = dataset.k
+    n, d = size(dataset.X)
+
+    sigma_a, c_a = get_covariance_and_center(dataset)
+    
+    sigma_b = [result.covariances[i] for i in 1:k]
+    c_b = [result.centers[i] for i in 1:k]
+
+    sigma_a = [norm_matrix(sigma_a[i]) for i in 1:k]
+    sigma_b = [norm_matrix(sigma_b[i]) for i in 1:k]
+
+    return centroid_index(c_a, sigma_a, c_b, sigma_b)
+end
 
 function centroid_index_mixture(dataset::Dataset, result::UnsupervisedClustering.Result)
     if result isa UnsupervisedClustering.KmeansResult
@@ -148,12 +163,24 @@ function centroid_index_mixture(dataset::Dataset, result::UnsupervisedClustering
     end
 end
 
+function centroid_index_mixture_norm(dataset::Dataset, result::UnsupervisedClustering.Result)
+    if result isa UnsupervisedClustering.KmeansResult
+        return centroid_index_sphere(dataset, result)
+    elseif result isa UnsupervisedClustering.GMMResult
+        return centroid_index_ellipsoid_norm(dataset, result)
+    else
+        throw(ArgumentError("Unsupported result type"))
+    end
+end
+
 Base.@kwdef struct Evaluation
     ari::Float64
     nmi::Float64
     ci_sphere::Int
     ci_ellipsoid::Int
+    ci_ellipsoid_norm::Int
     ci_mixture::Int
+    ci_mixture_norm::Int
 
     mirkins_index::Float64
     huberts_index::Float64
@@ -169,7 +196,9 @@ function Evaluation(dataset::Dataset, result::UnsupervisedClustering.Result)
         nmi = Clustering.mutualinfo(dataset.expected, result.assignments, normed = true),
         ci_sphere = centroid_index_sphere(dataset, result),
         ci_ellipsoid = centroid_index_ellipsoid(dataset, result),
+        ci_ellipsoid_norm = centroid_index_ellipsoid_norm(dataset, result),
         ci_mixture = centroid_index_mixture(dataset, result),
+        ci_mixture_norm = centroid_index_mixture_norm(dataset, result),
         mirkins_index = ri[3],
         huberts_index = ri[4],
         varinfo = Clustering.varinfo(dataset.expected, result.assignments),
