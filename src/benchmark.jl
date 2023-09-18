@@ -64,9 +64,9 @@ function get_algorithm(algorithm::Symbol, n::Int, d::Int, seed::Int = 123)
     kmeans = Kmeans(rng = Xoshiro(seed))
     gmm = GMM(estimator = EmpiricalCovarianceMatrix(n, d), rng = Xoshiro(seed))
     gmm_shrunk = GMM(estimator = ShrunkCovarianceMatrix(n, d), rng = Xoshiro(seed),
-        #verbose = true,
-        #tolerance = 1e-2,
-        #max_iterations = 20,
+        # verbose = true,
+        # tolerance = 1e-2,
+        # max_iterations = 20,
     )
     gmm_oas = GMM(estimator = OASCovarianceMatrix(n, d), rng = Xoshiro(seed))
     gmm_lw = GMM(estimator = LedoitWolfCovarianceMatrix(n, d), rng = Xoshiro(seed))
@@ -96,7 +96,7 @@ function get_algorithm(algorithm::Symbol, n::Int, d::Int, seed::Int = 123)
     elseif algorithm == :gmm_hg_shrunk
         GeneticAlgorithm(
             local_search = gmm_shrunk,
-            verbose = true,
+            # verbose = true,
         )
     elseif algorithm == :gmm_oas
         gmm_oas
