@@ -217,12 +217,14 @@ function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
 end
 
 function save(benchmark::Benchmark, path::String, filename::String)
+    csv_path = joinpath(path, "$filename.csv")
+
     if size(benchmark.syn, 1) > 0
-        CSV.write("$(joinpath(path, "$filename.csv"))", benchmark.syn)
+        CSV.write("$csv_path", benchmark.syn)
     end
 
     if size(benchmark.uci, 1) > 0
-        CSV.write("$(joinpath(path, "$filename.csv"))", benchmark.uci)
+        CSV.write("$csv_path", benchmark.uci)
     end
     return nothing
 end

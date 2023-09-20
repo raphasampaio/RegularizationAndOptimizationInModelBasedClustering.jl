@@ -175,7 +175,7 @@ function run(options::Dict{String, Any})
                 for i in options["i"]
                     run(benchmark, k, d, c, i)
                 end
-                save(benchmark, joinpath(".", "results"), filename)
+                save(benchmark, ".", filename)
             end
         end
     end
@@ -186,7 +186,7 @@ function run(options::Dict{String, Any})
     if options["uci"]
         for dataset in options["datasets"]
             run(benchmark, uci_datasets[dataset], options["i"])
-            save(benchmark, joinpath(".", "results"), filename)
+            save(benchmark, ".", filename)
         end
     end
 end
