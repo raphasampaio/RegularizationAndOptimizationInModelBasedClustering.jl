@@ -6,35 +6,34 @@ function parse_commandline(args)
             default = [3, 10, 20]
             arg_type = Vector{Int}
             eval_arg = true
-            help = ""
         "-c"
             default = [-0.26, -0.1, 0.01, 0.21]
             arg_type = Vector{Float64}
             eval_arg = true
-            help = ""
         "-d"
             default = [2, 5, 10, 20, 30, 40]
             arg_type = Vector{Int}
             eval_arg = true
-            help = ""
         "-i"
             default = [1:20;]
             arg_type = Vector{Int}
             eval_arg = true
-            help = ""
         "--uci"
             action = :store_true
-            help = ""
         "--algorithms"
             default = [1:20;]
             arg_type = Vector{Int}
             eval_arg = true
-            help = ""
         "--datasets"
             default = [1:21;]
             arg_type = Vector{Int}
             eval_arg = true
-            help = ""
+        "--tolerance"
+            default = 1e-3
+            arg_type = Float64
+        "--maxiterations"
+            default = 1000
+            arg_type = Int
     end
 
     return ArgParse.parse_args(args, s)

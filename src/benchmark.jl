@@ -60,16 +60,43 @@ function clean!(benchmark::Benchmark)
     return nothing
 end
 
-function get_algorithm(algorithm::Symbol, n::Int, d::Int, seed::Int = 123)
-    kmeans = Kmeans(rng = Xoshiro(seed))
-    gmm = GMM(estimator = EmpiricalCovarianceMatrix(n, d), rng = Xoshiro(seed))
-    gmm_shrunk = GMM(estimator = ShrunkCovarianceMatrix(n, d), rng = Xoshiro(seed),
-        # verbose = true,
-        tolerance = 1e-2,
-        max_iterations = 100,
+function get_algorithm(
+    algorithm::Symbol,
+    n::Int,
+    d::Int,
+    seed::Int,
+    tolerance::Float64,
+    max_iterations::Int
+)
+    kmeans = Kmeans(
+        rng = Xoshiro(seed),
+        tolerance = tolerance,
+        max_iterations = max_iterations,
     )
-    gmm_oas = GMM(estimator = OASCovarianceMatrix(n, d), rng = Xoshiro(seed))
-    gmm_lw = GMM(estimator = LedoitWolfCovarianceMatrix(n, d), rng = Xoshiro(seed))
+    gmm = GMM(
+        estimator = EmpiricalCovarianceMatrix(n, d),
+        rng = Xoshiro(seed),
+        tolerance = tolerance,
+        max_iterations = max_iterations,
+    )
+    gmm_shrunk = GMM(
+        estimator = ShrunkCovarianceMatrix(n, d),
+        rng = Xoshiro(seed),
+        tolerance = tolerance,
+        max_iterations = max_iterations,
+    )
+    gmm_oas = GMM(
+        estimator = OASCovarianceMatrix(n, d),
+        rng = Xoshiro(seed),
+        tolerance = tolerance,
+        max_iterations = max_iterations,
+    )
+    gmm_lw = GMM(
+        estimator = LedoitWolfCovarianceMatrix(n, d),
+        rng = Xoshiro(seed),
+        tolerance = tolerance,
+        max_iterations = max_iterations,
+    )
 
     return if algorithm == :kmeans
         kmeans
@@ -94,10 +121,7 @@ function get_algorithm(algorithm::Symbol, n::Int, d::Int, seed::Int = 123)
     elseif algorithm == :gmm_rs_shrunk
         RandomSwap(local_search = gmm_shrunk)
     elseif algorithm == :gmm_hg_shrunk
-        GeneticAlgorithm(
-            local_search = gmm_shrunk,
-            # verbose = true,
-        )
+        GeneticAlgorithm(local_search = gmm_shrunk)
     elseif algorithm == :gmm_oas
         gmm_oas
     elseif algorithm == :gmm_ms_oas
@@ -119,14 +143,14 @@ function get_algorithm(algorithm::Symbol, n::Int, d::Int, seed::Int = 123)
     end
 end
 
-function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
+function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int, tolerance::Float64, max_iterations::Int)
     file = "$(k)_$(d)_$(c)_$(i)"
 
     for symbol in benchmark.symbols
         dataset = Dataset(joinpath("data", "$file.csv"))
         n, d = size(dataset.X)
 
-        algorithm = get_algorithm(symbol, n, d, 123)
+        algorithm = get_algorithm(symbol, n, d, 123, tolerance, max_iterations)
 
         t = @elapsed result = UnsupervisedClustering.fit(algorithm, dataset.X, dataset.k)
         evaluation = Evaluation(dataset, result)
@@ -166,14 +190,14 @@ function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int)
     end
 end
 
-function run(benchmark::Benchmark, file::String, seeds::Vector{Int})
+function run(benchmark::Benchmark, file::String, seeds::Vector{Int}, tolerance::Float64, max_iterations::Int)
     for symbol in benchmark.symbols
         dataset = Dataset(joinpath("data", "uci", "$file.csv"))
         n, d = size(dataset.X)
         k = dataset.k
 
         for seed in seeds
-            algorithm = get_algorithm(symbol, n, d, seed)
+            algorithm = get_algorithm(symbol, n, d, seed, tolerance, max_iterations)
 
             t = @elapsed result = UnsupervisedClustering.fit(algorithm, dataset.X, dataset.k)
             evaluation = Evaluation(dataset, result)

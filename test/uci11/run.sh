@@ -23,4 +23,4 @@ chmod +x run.sh
 
 ./run.sh -k=[]
 
-./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[1,2,3,4,5,6,7,8,9,10] -k=[] --uci --datasets=[22]
+./run.sh --algorithm=[1,4,5,6,7,8,9,10,11,12] -i=[1,2,3,4,5,6,7,8,9,10] -k=[] --uci --datasets=[22] --tolerance=1e-2 --maxiterations=100
