@@ -66,91 +66,97 @@ function get_algorithm(
     d::Int,
     seed::Int,
     tolerance::Float64,
-    max_iterations::Int
+    max_iterations::Int,
+    verbose::Bool
 )
     kmeans = Kmeans(
         rng = Xoshiro(seed),
         tolerance = tolerance,
         max_iterations = max_iterations,
+        verbose = verbose,
     )
     gmm = GMM(
         estimator = EmpiricalCovarianceMatrix(n, d),
         rng = Xoshiro(seed),
         tolerance = tolerance,
         max_iterations = max_iterations,
+        verbose = verbose,
     )
     gmm_shrunk = GMM(
         estimator = ShrunkCovarianceMatrix(n, d),
         rng = Xoshiro(seed),
         tolerance = tolerance,
         max_iterations = max_iterations,
+        verbose = verbose,
     )
     gmm_oas = GMM(
         estimator = OASCovarianceMatrix(n, d),
         rng = Xoshiro(seed),
         tolerance = tolerance,
         max_iterations = max_iterations,
+        verbose = verbose,
     )
     gmm_lw = GMM(
         estimator = LedoitWolfCovarianceMatrix(n, d),
         rng = Xoshiro(seed),
         tolerance = tolerance,
         max_iterations = max_iterations,
+        verbose = verbose,
     )
 
     return if algorithm == :kmeans
         kmeans
     elseif algorithm == :kmeans_ms
-        MultiStart(local_search = kmeans)
+        MultiStart(local_search = kmeans, verbose = verbose)
     elseif algorithm == :kmeans_rs
-        RandomSwap(local_search = kmeans)
+        RandomSwap(local_search = kmeans, verbose = verbose)
     elseif algorithm == :kmeans_hg
-        GeneticAlgorithm(local_search = kmeans)
+        GeneticAlgorithm(local_search = kmeans, verbose = verbose)
     elseif algorithm == :gmm
         gmm
     elseif algorithm == :gmm_ms
-        MultiStart(local_search = gmm)
+        MultiStart(local_search = gmm, verbose = verbose)
     elseif algorithm == :gmm_rs
-        RandomSwap(local_search = gmm)
+        RandomSwap(local_search = gmm, verbose = verbose)
     elseif algorithm == :gmm_hg
-        GeneticAlgorithm(local_search = gmm)
+        GeneticAlgorithm(local_search = gmm, verbose = verbose)
     elseif algorithm == :gmm_shrunk
         gmm_shrunk
     elseif algorithm == :gmm_ms_shrunk
-        MultiStart(local_search = gmm_shrunk)
+        MultiStart(local_search = gmm_shrunk, verbose = verbose)
     elseif algorithm == :gmm_rs_shrunk
-        RandomSwap(local_search = gmm_shrunk)
+        RandomSwap(local_search = gmm_shrunk, verbose = verbose)
     elseif algorithm == :gmm_hg_shrunk
-        GeneticAlgorithm(local_search = gmm_shrunk)
+        GeneticAlgorithm(local_search = gmm_shrunk, verbose = verbose)
     elseif algorithm == :gmm_oas
         gmm_oas
     elseif algorithm == :gmm_ms_oas
-        MultiStart(local_search = gmm_oas)
+        MultiStart(local_search = gmm_oas, verbose = verbose)
     elseif algorithm == :gmm_rs_oas
-        RandomSwap(local_search = gmm_oas)
+        RandomSwap(local_search = gmm_oas, verbose = verbose)
     elseif algorithm == :gmm_hg_oas
-        GeneticAlgorithm(local_search = gmm_oas)
+        GeneticAlgorithm(local_search = gmm_oas, verbose = verbose)
     elseif algorithm == :gmm_ledoitwolf
         gmm_lw
     elseif algorithm == :gmm_ms_ledoitwolf
-        MultiStart(local_search = gmm_lw)
+        MultiStart(local_search = gmm_lw, verbose = verbose)
     elseif algorithm == :gmm_rs_ledoitwolf
-        RandomSwap(local_search = gmm_lw)
+        RandomSwap(local_search = gmm_lw, verbose = verbose)
     elseif algorithm == :gmm_hg_ledoitwolf
-        GeneticAlgorithm(local_search = gmm_lw)
+        GeneticAlgorithm(local_search = gmm_lw, verbose = verbose)
     else
         error("algorithm not found")
     end
 end
 
-function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int, tolerance::Float64, max_iterations::Int)
+function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int, tolerance::Float64, max_iterations::Int, verbose::Bool)
     file = "$(k)_$(d)_$(c)_$(i)"
 
     for symbol in benchmark.symbols
         dataset = Dataset(joinpath("data", "$file.csv"))
         n, d = size(dataset.X)
 
-        algorithm = get_algorithm(symbol, n, d, 123, tolerance, max_iterations)
+        algorithm = get_algorithm(symbol, n, d, 123, tolerance, max_iterations, verbose)
 
         t = @elapsed result = UnsupervisedClustering.fit(algorithm, dataset.X, dataset.k)
         evaluation = Evaluation(dataset, result)
@@ -190,14 +196,14 @@ function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int, tolerance
     end
 end
 
-function run(benchmark::Benchmark, file::String, seeds::Vector{Int}, tolerance::Float64, max_iterations::Int)
+function run(benchmark::Benchmark, file::String, seeds::Vector{Int}, tolerance::Float64, max_iterations::Int, verbose::Bool)
     for symbol in benchmark.symbols
         dataset = Dataset(joinpath("data", "uci", "$file.csv"))
         n, d = size(dataset.X)
         k = dataset.k
 
         for seed in seeds
-            algorithm = get_algorithm(symbol, n, d, seed, tolerance, max_iterations)
+            algorithm = get_algorithm(symbol, n, d, seed, tolerance, max_iterations, verbose)
 
             t = @elapsed result = UnsupervisedClustering.fit(algorithm, dataset.X, dataset.k)
             evaluation = Evaluation(dataset, result)

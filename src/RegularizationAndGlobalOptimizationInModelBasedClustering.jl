@@ -167,16 +167,17 @@ function run(options::Dict{String, Any})
 
     tolerance = options["tolerance"]
     maxiterations = options["maxiterations"]
+    verbose = options["verbose"]
 
     # precompile
-    run(benchmark, 3, 2, -0.26, 1, tolerance, maxiterations)
+    run(benchmark, 3, 2, -0.26, 1, tolerance, maxiterations, false)
     clean!(benchmark)
 
     for k in options["k"]
         for c in options["c"]
             for d in options["d"]
                 for i in options["i"]
-                    run(benchmark, k, d, c, i, tolerance, maxiterations)
+                    run(benchmark, k, d, c, i, tolerance, maxiterations, verbose)
                 end
                 save(benchmark, "..", filename)
             end
@@ -188,7 +189,7 @@ function run(options::Dict{String, Any})
 
     if options["uci"]
         for dataset in options["datasets"]
-            run(benchmark, uci_datasets[dataset], options["i"], tolerance, maxiterations)
+            run(benchmark, uci_datasets[dataset], options["i"], tolerance, maxiterations, verbose)
             save(benchmark, "..", filename)
         end
     end

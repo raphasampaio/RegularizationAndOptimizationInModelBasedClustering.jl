@@ -34,6 +34,8 @@ function parse_commandline(args)
         "--maxiterations"
             default = 1000
             arg_type = Int
+        "--verbose"
+            action = :store_true
     end
 
     return ArgParse.parse_args(args, s)
