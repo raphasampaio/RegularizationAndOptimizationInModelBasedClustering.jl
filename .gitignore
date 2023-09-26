@@ -11,3 +11,5 @@ revise/Manifest.toml
 partes-upload
 upload_*
 dsbcaseinfo.dat
+
+.metadata

@@ -25,7 +25,7 @@ function uci()
         "gmm_hg_shrunk"
     ]
 
-    results = CSV.read(joinpath("results", "uci.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "uci-new.csv"), DataFrame)
 
     println(raw"""
 \begin{table}[htbp]
@@ -68,7 +68,7 @@ println(raw"""
         data = Vector{Float64}()
         for algorithm in algorithms
             df = filter(row -> row.dataset == dataset && row.algorithm == algorithm, results)
-            push!(data, round(Statistics.mean(df.ari); digits = 2))
+            push!(data, ceil(Statistics.mean(df.ari); digits = 2))
         end
 
         min, min_j = findmin(data)
@@ -92,7 +92,7 @@ println(raw"""
 data = Vector{Float64}()
 for algorithm in algorithms
     df = filter(row -> row.algorithm == algorithm, results)
-    push!(data, round(Statistics.mean(df.ari); digits = 2))
+    push!(data, ceil(Statistics.mean(df.ari); digits = 2))
 end
 
 min, min_j = findmin(data)
@@ -171,6 +171,97 @@ println(raw"""
 \label{uci_cpu}
 \end{table}
 """)
+
+println(raw"""
+\begin{table}[htbp]
+\centering
+\scalebox{0.9}
+{
+\begin{tabular}{@{}c|cccccccccc@{}}
+\toprule
+\multirow{3}{*}{Average} & k-means & k-means & GMM & GMM & GMM & GMM & GMM   & GMM    & GMM    & GMM    \\
+                    &         & HG      &     & MS  & RS  & HG  &        & MS     & RS     & HG     \\
+                    &         &         &     &     &     &     & Shrunk & Shrunk & Shrunk & Shrunk \\ \midrule 
+""")
+
+    print(raw"""
+\multicolumn{1}{c|}{ARI}""")
+
+data = Vector{Float64}()
+for algorithm in algorithms
+    df = filter(row -> row.algorithm == algorithm, results)
+    push!(data, ceil(Statistics.mean(df.ari); digits = 2))
+end
+
+min, min_j = findmin(data)
+max, max_j = findmax(data)
+
+for j in eachindex(data)
+    v = @sprintf "%.2f" data[j]
+    hex = get_greyscale(data[j], min, max)
+    if j == max_j || max == data[j]
+        print(" & \\cellcolor[HTML]{$hex}\\textbf{$v}")
+    else
+        print(" & \\cellcolor[HTML]{$hex}$v")
+    end
+end
+println(" \\\\")
+
+print(raw"""
+\multicolumn{1}{c|}{NMI}""")
+
+data = Vector{Float64}()
+for algorithm in algorithms
+    df = filter(row -> row.algorithm == algorithm, results)
+    push!(data, ceil(Statistics.mean(df.nmi); digits = 2))
+end
+
+min, min_j = findmin(data)
+max, max_j = findmax(data)
+
+for j in eachindex(data)
+    v = @sprintf "%.2f" data[j]
+    hex = get_greyscale(data[j], min, max)
+    if j == max_j || max == data[j]
+        print(" & \\cellcolor[HTML]{$hex}\\textbf{$v}")
+    else
+        print(" & \\cellcolor[HTML]{$hex}$v")
+    end
+end
+println(" \\\\")
+
+print(raw"""
+\multicolumn{1}{c|}{CI}""")
+
+data = Vector{Float64}()
+for algorithm in algorithms
+    df = filter(row -> row.algorithm == algorithm, results)
+    push!(data, ceil(Statistics.mean(df.ci_sphere); digits = 2))
+end
+
+min, min_j = findmin(data)
+max, max_j = findmax(data)
+
+for j in eachindex(data)
+    v = @sprintf "%.2f" data[j]
+    hex = get_greyscale(data[j], max, min)
+    if j == min_j || min == data[j]
+        print(" & \\cellcolor[HTML]{$hex}\\textbf{$v}")
+    else
+        print(" & \\cellcolor[HTML]{$hex}$v")
+    end
+end
+println(" \\\\")
+
+println(raw"""
+\bottomrule
+\end{tabular}
+}
+\caption{Comparison of the ARI, NMI, and CI averages on the UCI datasets}
+\label{uci_metrics}
+\end{table}
+""")
+
 end
 
 function wilcoxon()
@@ -234,7 +325,7 @@ function wilcoxon()
 \\end{table}
 """)
 
-results = CSV.read(joinpath("results", "uci.csv"), DataFrame)
+results = CSV.read(joinpath("results", "uci-new.csv"), DataFrame)
 sort!(results, [:algorithm, :dataset, :i])
 
 println("""

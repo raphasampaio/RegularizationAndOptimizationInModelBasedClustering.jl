@@ -62,7 +62,6 @@ const uci_datasets = [
     "waveform",
     "scadi",
     "glass",
-    "mnist",
     "fashion_mnist",
 ]
 
@@ -87,7 +86,6 @@ const uci_translation = Dict(
     "waveform" => "Waveform",
     "scadi" => "Scadi",
     "glass" => "Glass",
-    "mnist" => "MNIST",
     "fashion_mnist" => "Fashion MNIST",
 )
 
