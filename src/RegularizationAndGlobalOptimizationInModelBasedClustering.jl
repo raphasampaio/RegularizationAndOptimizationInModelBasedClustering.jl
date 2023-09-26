@@ -188,7 +188,6 @@ function run(options::Dict{String, Any})
     filename = "uci-[$datasets_str]-[$i_str]-$timestamp"
 
     if options["uci"]
-        run(benchmark, "fashion_mnist", options["i"], 0.1, 2, false)
         for dataset in options["datasets"]
             run(benchmark, uci_datasets[dataset], options["i"], tolerance, maxiterations, verbose)
             save(benchmark, "..", filename)
