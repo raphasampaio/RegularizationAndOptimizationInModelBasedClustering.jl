@@ -65,14 +65,14 @@ end
 function centroid_index_sphere(dataset::Dataset, result::UnsupervisedClustering.KmeansResult)
     k = dataset.k
     c_a = [mean(dataset.X[dataset.expected .== i, :], dims = 1) for i in 1:k]
-    c_b = [result.centers[:, i]' for i in 1:k]
+    c_b = [result.clusters[:, i]' for i in 1:k]
     return centroid_index(c_a, c_b)
 end
 
 function centroid_index_sphere(dataset::Dataset, result::UnsupervisedClustering.GMMResult)
     k = dataset.k
     c_a = [mean(dataset.X[dataset.expected .== i, :], dims = 1) for i in 1:k]
-    c_b = [result.centers[i]' for i in 1:k]
+    c_b = [result.clusters[i]' for i in 1:k]
     return centroid_index(c_a, c_b)
 end
 
@@ -101,7 +101,7 @@ function centroid_index_ellipsoid(dataset::Dataset, result::UnsupervisedClusteri
     sigma_a, c_a = get_covariance_and_center(dataset)
     
     sigma_b = [Matrix{Float64}(I, d, d) for i in 1:k]
-    c_b = [result.centers[:, i]' for i in 1:k]
+    c_b = [result.clusters[:, i]' for i in 1:k]
 
     return centroid_index(c_a, sigma_a, c_b, sigma_b)
 end
@@ -112,7 +112,7 @@ function centroid_index_ellipsoid(dataset::Dataset, result::UnsupervisedClusteri
     sigma_a, c_a = get_covariance_and_center(dataset)
     
     sigma_b = [result.covariances[i] for i in 1:k]
-    c_b = [result.centers[i] for i in 1:k]
+    c_b = [result.clusters[i] for i in 1:k]
 
     return centroid_index(c_a, sigma_a, c_b, sigma_b)
 end
@@ -130,7 +130,7 @@ function centroid_index_ellipsoid_norm(dataset::Dataset, result::UnsupervisedClu
     sigma_a, c_a = get_covariance_and_center(dataset)
     
     sigma_b = [Matrix{Float64}(I, d, d) for i in 1:k]
-    c_b = [result.centers[:, i]' for i in 1:k]
+    c_b = [result.clusters[:, i]' for i in 1:k]
 
     sigma_a = [norm_matrix(sigma_a[i]) for i in 1:k]
     sigma_b = [norm_matrix(sigma_b[i]) for i in 1:k]
@@ -145,7 +145,7 @@ function centroid_index_ellipsoid_norm(dataset::Dataset, result::UnsupervisedClu
     sigma_a, c_a = get_covariance_and_center(dataset)
     
     sigma_b = [result.covariances[i] for i in 1:k]
-    c_b = [result.centers[i] for i in 1:k]
+    c_b = [result.clusters[i] for i in 1:k]
 
     sigma_a = [norm_matrix(sigma_a[i]) for i in 1:k]
     sigma_b = [norm_matrix(sigma_b[i]) for i in 1:k]
