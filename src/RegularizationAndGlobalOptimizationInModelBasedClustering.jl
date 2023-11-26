@@ -42,27 +42,44 @@ const translation = Dict(
 )
 
 const uci_datasets = [
-    "facebook_live_sellers",
-    "handwritten_digits",
-    "hcv",
-    "human_activity_recognition",
-    "image_segmentation",
-    "ionosphere",
-    "iris",
-    "letter_recognition",
-    "magic",
-    "mice_protein",
-    "pendigits",
-    "seeds",
-    "spect",
-    "shuttle",
-    "wholesale",
-    "wines",
-    "yeast",
-    "waveform",
-    "scadi",
-    "glass",
-    "fashion_mnist",
+    # "1-abalone", # GOOD 
+    # "12-balance-scale", # BAD  
+    # "17-breast-cancer-wisconsin-diagnostic", # BAD  
+    # "29-computer-hardware", # BAD  
+    # "30-contraceptive-method-choice", # BAD  
+    # "31-covertype", # HUGE 
+    # "39-ecoli", # GOOD 
+    # "42-glass-identification", # BAD  
+    # "43-habermans-survival", # GOOD 
+    # "44-hayes-roth", # BAD  
+    # "50-image-segmentation", # BAD  
+    # "52-ionosphere", # GOOD 
+    # "53-iris", # GOOD
+    "54-isolet",
+    # "59-letter-recognition", # EQUAL
+    # "60-liver-disorders", # BAD
+    # "80-optical-recognition-of-handwritten-digits", # GOOD
+    "81-pen-based-recognition-of-handwritten-digits",
+    # "109-wine", # GOOD
+    # "110-yeast", # EQUAL
+    # "111-zoo", # GOOD
+    "125-insurance-company-benchmark-coil-2000",
+    "145-statlog-heart",
+    "146-statlog-landsat-satellite",
+    "148-statlog-shuttle",
+    "149-statlog-vehicle-silhouettes",
+    # "159-magic-gamma-telescope", # EQUAL
+    # "186-wine-quality", # BAD
+    # "186-wine-quality-red", # BAD
+    # "186-wine-quality-white", # BAD
+    "236-seeds",
+    "240-human-activity-recognition-using-smartphones",
+    "292-wholesale-customers",
+    # "350-default-of-credit-card-clients", # BAD
+    "519-heart-failure-clinical-records",
+    # "545-rice-cammeo-and-osmancik", # GOOD
+    # "602-dry-bean-dataset",
+    # "697-predict-students-dropout-and-academic-success", # BAD
 ]
 
 const uci_translation = Dict(
@@ -186,8 +203,8 @@ function run(options::Dict{String, Any})
     filename = "uci-[$datasets_str]-[$i_str]-$timestamp"
 
     if options["uci"]
-        for dataset in options["datasets"]
-            run(benchmark, uci_datasets[dataset], options["i"], tolerance, maxiterations, verbose)
+        for dataset in uci_datasets
+            run(benchmark, dataset, options["i"], tolerance, maxiterations, verbose)
             save(benchmark, "..", filename)
         end
     end

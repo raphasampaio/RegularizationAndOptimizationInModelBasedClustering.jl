@@ -198,7 +198,7 @@ end
 
 function run(benchmark::Benchmark, file::String, seeds::Vector{Int}, tolerance::Float64, max_iterations::Int, verbose::Bool)
     for symbol in benchmark.symbols
-        dataset = Dataset(joinpath("data", "uci", "$file.csv"))
+        dataset = Dataset(joinpath(raw"D:\development\papers\clustering-recent\uci-data\data", "$file.csv"))
         n, d = size(dataset.X)
         k = dataset.k
 
