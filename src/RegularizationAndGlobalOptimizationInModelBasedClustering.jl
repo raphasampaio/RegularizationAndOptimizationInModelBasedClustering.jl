@@ -10,6 +10,7 @@ using HypothesisTests
 using LinearAlgebra
 using RegularizedCovarianceMatrices
 using Printf
+using StatsBase
 using UnsupervisedClustering
 using TimerOutputs
 
@@ -42,42 +43,42 @@ const translation = Dict(
 )
 
 const uci_datasets = [
-    # "1-abalone", # GOOD 
-    # "12-balance-scale", # BAD  
-    # "17-breast-cancer-wisconsin-diagnostic", # BAD  
-    # "29-computer-hardware", # BAD  
-    # "30-contraceptive-method-choice", # BAD  
-    # "31-covertype", # HUGE 
-    # "39-ecoli", # GOOD 
-    # "42-glass-identification", # BAD  
-    # "43-habermans-survival", # GOOD 
-    # "44-hayes-roth", # BAD  
-    # "50-image-segmentation", # BAD  
-    # "52-ionosphere", # GOOD 
-    # "53-iris", # GOOD
-    "54-isolet",
-    # "59-letter-recognition", # EQUAL
-    # "60-liver-disorders", # BAD
-    # "80-optical-recognition-of-handwritten-digits", # GOOD
-    "81-pen-based-recognition-of-handwritten-digits",
-    # "109-wine", # GOOD
-    # "110-yeast", # EQUAL
-    # "111-zoo", # GOOD
+    "1-abalone", # GOOD 
+    "12-balance-scale", # BAD  
+    "17-breast-cancer-wisconsin-diagnostic", # BAD  
+    "29-computer-hardware", # BAD  
+    "30-contraceptive-method-choice", # BAD  
+    # "31-covertype", # HUGE
+    "39-ecoli", # GOOD 
+    "42-glass-identification", # BAD  
+    "43-habermans-survival", # GOOD 
+    "44-hayes-roth", # BAD  
+    "50-image-segmentation", # BAD  
+    "52-ionosphere", # GOOD 
+    "53-iris", # GOOD
+    # "54-isolet", # HUGE
+    "59-letter-recognition", # EQUAL
+    "60-liver-disorders", # BAD
+    "80-optical-recognition-of-handwritten-digits", # GOOD
+    # "81-pen-based-recognition-of-handwritten-digits",
+    "109-wine", # GOOD
+    "110-yeast", # EQUAL
+    "111-zoo", # GOOD
     "125-insurance-company-benchmark-coil-2000",
     "145-statlog-heart",
     "146-statlog-landsat-satellite",
     "148-statlog-shuttle",
     "149-statlog-vehicle-silhouettes",
-    # "159-magic-gamma-telescope", # EQUAL
-    # "186-wine-quality", # BAD
-    # "186-wine-quality-red", # BAD
-    # "186-wine-quality-white", # BAD
+    "159-magic-gamma-telescope", # EQUAL
+    "186-wine-quality", # BAD
+    "186-wine-quality-red", # BAD
+    "186-wine-quality-white", # BAD
     "236-seeds",
-    "240-human-activity-recognition-using-smartphones",
+    # "240-human-activity-recognition-using-smartphones", # HUGE
     "292-wholesale-customers",
-    # "350-default-of-credit-card-clients", # BAD
+    "350-default-of-credit-card-clients", # BAD
     "519-heart-failure-clinical-records",
-    # "545-rice-cammeo-and-osmancik", # GOOD
+    "545-rice-cammeo-and-osmancik", # GOOD
     # "602-dry-bean-dataset",
     # "697-predict-students-dropout-and-academic-success", # BAD
 ]
