@@ -43,67 +43,58 @@ const translation = Dict(
 )
 
 const uci_datasets = [
-    "1-abalone", # GOOD 
-    "12-balance-scale", # BAD  
-    "17-breast-cancer-wisconsin-diagnostic", # BAD  
-    "29-computer-hardware", # BAD  
-    "30-contraceptive-method-choice", # BAD  
-    # "31-covertype", # HUGE
-    "39-ecoli", # GOOD 
-    "42-glass-identification", # BAD  
-    "43-habermans-survival", # GOOD 
-    "44-hayes-roth", # BAD  
-    "50-image-segmentation", # BAD  
-    "52-ionosphere", # GOOD 
-    "53-iris", # GOOD
-    # "54-isolet", # HUGE
-    "59-letter-recognition", # EQUAL
-    "60-liver-disorders", # BAD
-    "80-optical-recognition-of-handwritten-digits", # GOOD
-    # "81-pen-based-recognition-of-handwritten-digits",
-    "109-wine", # GOOD
-    "110-yeast", # EQUAL
-    "111-zoo", # GOOD
-    "125-insurance-company-benchmark-coil-2000",
-    "145-statlog-heart",
-    "146-statlog-landsat-satellite",
-    "148-statlog-shuttle",
-    "149-statlog-vehicle-silhouettes",
-    "159-magic-gamma-telescope", # EQUAL
-    "186-wine-quality", # BAD
-    "186-wine-quality-red", # BAD
-    "186-wine-quality-white", # BAD
-    "236-seeds",
-    # "240-human-activity-recognition-using-smartphones", # HUGE
-    "292-wholesale-customers",
-    "350-default-of-credit-card-clients", # BAD
-    "519-heart-failure-clinical-records",
-    "545-rice-cammeo-and-osmancik", # GOOD
-    # "602-dry-bean-dataset",
-    # "697-predict-students-dropout-and-academic-success", # BAD
+    # "42-glass-identification",                              # | MINMAX NOT THAT GOOD BUT WORKS
+    # "facebook_live_sellers" => "Facebook Live Sellers \\citep{dehouche2018facebook}",
+    # "80-optical-recognition-of-handwritten-digits",         # | ADD - MINMAX
+    # "571-hcv-data",                                         # | ADD - MINMAX
+    # "240-human-activity-recognition-using-smartphones",     # | ?
+    # "50-image-segmentation",                                # | ADD - MINMAX
+    # "52-ionosphere",                                        # | ADD - MINMAX
+    # "53-iris",                                              # | ADD - MINMAX NOT THAT GOOD BUT WORKS
+    # "59-letter-recognition",                                # | ADD - MINMAX NOT THAT GOOD BUT WORKS
+    # "159-magic-gamma-telescope",                            # | ADD - MINMAX
+    # "342-mice-protein-expression",                          # | ADD - MINMAX
+    # "81-pen-based-recognition-of-handwritten-digits",       # | ADD - MINMAX
+    # "236-seeds",                                            # | ADD - MINMAX
+    # "95-spect-heart",                                       # | ADD - MINMAX
+    # "148-statlog-shuttle",                                  # | ADD - MINMAX
+    # "292-wholesale-customers",                              # | ADD
+    # "109-wine",                                             # | ADD - MINMAX
+    # "110-yeast",                                            # | ADD - MINMAX
+    # "107-waveform-database-generator-version-1",            # | ADD - MINMAX
+    # "446-scadi",                                            # | ADD - MINMAX
+    # "fashion_mnist",
+    # PAPER #
+    # NEW DATASETS #
+    # "39-ecoli",                                             # | ADD - MINMAX
+    # "91-soybean-small",                                     # | ADD - MINMAX
+    # "545-rice-cammeo-and-osmancik",                         # | ADD - MINMAX
+    # "602-dry-bean-dataset",                                 # | ADD - MINMAX
+    # NEW DATASETS #
 ]
 
+## ACERTAR OS NOMES DOS AUTORES NO BIBTEX
 const uci_translation = Dict(
     "facebook_live_sellers" => "Facebook Live Sellers \\citep{dehouche2018facebook}",
-    "handwritten_digits" => "Handwritten Digits",
-    "hcv" => "HCV",
-    "human_activity_recognition" => "Human Activity Recognition \\citep{anguita2013public}",
-    "image_segmentation" => "Image Segmentation",
-    "ionosphere" => "Ionosphere",
-    "iris" => "Iris",
-    "letter_recognition" => "Letter Recognition",
-    "magic" => "MAGIC Gamma Telescope",
-    "mice_protein" => "Mice Protein Expression \\citep{higuera2015self}",
-    "pendigits" => "Pen-Based Recognition",
-    "seeds" => "Seeds",
-    "spect" => "SPECT Heart",
-    "shuttle" => "Statlog (Shuttle)",
-    "wholesale" => "Wholesale Customers",
-    "wines" => "Wines",
-    "yeast" => "Yeast",
-    "waveform" => "Waveform",
-    "scadi" => "Scadi",
-    "glass" => "Glass",
+    # "80-optical-recognition-of-handwritten-digits" => "Optical Recognition of Handwritten Digits \\citep{misc_optical_recognition_of_handwritten_digits_80}   ",
+    # "571-hcv-data" => "HCV Data \\citep{misc_hcv_data_571}",
+    # "240-human-activity-recognition-using-smartphones" => "Human Activity Recognition \\citep{misc_human_activity_recognition_using_smartphones_240}",
+    # "50-image-segmentation" => "Image Segmentation \\citep{misc_image_segmentation_50}",
+    # "52-ionosphere" => "Ionosphere \\citep{misc_ionosphere_52}",
+    # "53-iris" => "Iris \\citep{misc_iris_53}",
+    # "59-letter-recognition" => "Letter Recognition \\citep{misc_letter_recognition_59}",
+    # "159-magic-gamma-telescope" => "MAGIC Gamma Telescope \\citep{misc_magic_gamma_telescope_159}",
+    # "342-mice-protein-expression" => "Mice Protein Expression \\citep{misc_mice_protein_expression_342}",
+    # "81-pen-based-recognition-of-handwritten-digits" => "Pen-Based Recognition of Handwritten Digits \\citep{misc_pen-based_recognition_of_handwritten_digits_81}",
+    # "236-seeds" => "Seeds \\citep{misc_seeds_236}",
+    # "95-spect-heart" => "SPECT Heart \\citep{misc_spect_heart_95}",
+    # "148-statlog-shuttle" => "Statlog (Shuttle) \\citep{misc_statlog_(shuttle)_148}",
+    # "292-wholesale-customers" => "Wholesale Customers \\citep{misc_wholesale_customers_292}",
+    # "109-wine" => "Wine \\citep{misc_wine_109}",
+    # "110-yeast" => "Yeast \\citep{misc_yeast_110}",
+    # "107-waveform-database-generator-version-1" => "Waveform Database Generator (Version 1) \\citep{misc_waveform_database_generator_(version_1)_107}",
+    # "446-scadi" => "Scadi \\citep{misc_scadi_446}",
+    # "42-glass-identification" => "Glass Identification \\citep{misc_glass_identification_42}",
     "fashion_mnist" => "Fashion MNIST",
 )
 
