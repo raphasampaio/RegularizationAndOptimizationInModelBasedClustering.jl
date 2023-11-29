@@ -40,7 +40,14 @@ struct Dataset
             # @show tmin
             # @show tmax
 
-            @assert !any(isnan.(X))
+            for i in 1:d
+                if any(isnan.(X[:, i]))
+                    @show i
+                    @show maximum(X[:, i])
+                    @show minimum(X[:, i])
+                    error("NaN")
+                end
+            end
 
             return new(string(path), k, X, expected)
         end
