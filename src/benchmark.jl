@@ -199,7 +199,7 @@ end
 
 function run(benchmark::Benchmark, file::String, seeds::Vector{Int}, tolerance::Float64, max_iterations::Int, verbose::Bool)
     for symbol in benchmark.symbols
-        path = joinpath(raw"/Users/raphasampaio/Developer/Clustering/uci-data/data", "$file.csv")
+        path = joinpath("data", "uci", "$file.csv")
         dataset = Dataset(path, DatasetNormMinMax)
         n, d = size(dataset.X)
         k = dataset.k
