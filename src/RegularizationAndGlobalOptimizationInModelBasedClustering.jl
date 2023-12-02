@@ -45,7 +45,7 @@ const translation = Dict(
 const uci_datasets = [
     "fashion_mnist",
     "240-human-activity-recognition-using-smartphones",
-
+    "facebook_live_sellers",
     "iris",
     "wines",
     "ionosphere",
@@ -69,7 +69,6 @@ const uci_datasets = [
     "91-soybean-small",                                     
     "545-rice-cammeo-and-osmancik",                         
     "602-dry-bean-dataset",                                 
-    "facebook_live_sellers",
 ]
 
 const uci_translation = Dict(
@@ -193,8 +192,8 @@ function run(options::Dict{String, Any})
     filename = "uci-[$datasets_str]-[$i_str]-$timestamp"
 
     if options["uci"]
-        for dataset in uci_datasets
-            run(benchmark, dataset, options["i"], tolerance, maxiterations, verbose)
+        for dataset in options["datasets"]
+            run(benchmark, uci_datasets[dataset], options["i"], tolerance, maxiterations, verbose)
             save(benchmark, "..", filename)
         end
     end
