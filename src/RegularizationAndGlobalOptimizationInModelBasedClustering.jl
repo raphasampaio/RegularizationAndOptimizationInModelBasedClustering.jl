@@ -42,6 +42,10 @@ const translation = Dict(
 )
 
 const uci_datasets = [
+    "39-ecoli",
+    "545-rice-cammeo-and-osmancik",
+    "602-dry-bean-dataset",
+    "91-soybean-small",
     "facebook_live_sellers",
     "handwritten_digits",
     "hcv",
