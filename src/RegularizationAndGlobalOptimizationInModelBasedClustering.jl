@@ -106,6 +106,8 @@ include("postprocessing.jl")
 
 function run(options::Dict{String, Any})
     Sys.cpu_summary()
+    @show Sys.total_memory() / 2^20
+    @show Sys.free_memory() / 2^20
 
     benchmark = Benchmark()
 
