@@ -43,84 +43,33 @@ const translation = Dict(
 )
 
 const uci_datasets = [
-    # "seeds",
-    # "glass",
-    # "446-scadi",
-    # "hcv",
-    # "yeast",
-    # "image_segmentation",
-    # "waveform",
-    # "pendigits",
-    # "letter_recognition",
-    # "handwritten_digits",
-    # "mice_protein",
-    # "magic",
-    # "shuttle",
-    # "39-ecoli",                                             
-    # "91-soybean-small",                                     
-    # "545-rice-cammeo-and-osmancik",                         
-    # "602-dry-bean-dataset",                                 
-    # "facebook_live_sellers",
     "fashion_mnist",
     "240-human-activity-recognition-using-smartphones",
 
-    # # "236-seeds",
-    # "seeds",
-    # # "42-glass-identification",
-    # "glass",
-    # # "scadi",
-    # "446-scadi",
-    # # "571-hcv-data",
-    # "hcv",
-    # # "110-yeast",
-    # "yeast",
-    # # "50-image-segmentation",
-    # "image_segmentation",
-    # # "107-waveform-database-generator-version-1",
-    # "waveform",
-    # "pendigits",
-    # # "81-pen-based-recognition-of-handwritten-digits",
-    # "letter_recognition",
-    # # "59-letter-recognition",
-    # # "80-optical-recognition-of-handwritten-digits",
-    # "handwritten_digits",
-    # # "342-mice-protein-expression",
-    # "mice_protein",
-    # # "159-magic-gamma-telescope",
-    # "magic",
-    # # "148-statlog-shuttle",
-    # "shuttle",
-    # "240-human-activity-recognition-using-smartphones",
-    # # "human_activity_recognition",
+    "iris",
+    "wines",
+    "ionosphere",
+    "wholesale",
+    "spect",
 
-    # "42-glass-identification",                              # | MINMAX NOT THAT GOOD BUT WORKS
-    # "facebook_live_sellers" => "Facebook Live Sellers \\citep{dehouche2018facebook}",
-    # "80-optical-recognition-of-handwritten-digits",         # | ADD - MINMAX
-    # "571-hcv-data",                                         # | ADD - MINMAX
-    # "240-human-activity-recognition-using-smartphones",     # | ?
-    # "50-image-segmentation",                                # | ADD - MINMAX
-    # "52-ionosphere",                                        # | ADD - MINMAX
-    # "53-iris",                                              # | ADD - MINMAX NOT THAT GOOD BUT WORKS
-    # "59-letter-recognition",                                # | ADD - MINMAX NOT THAT GOOD BUT WORKS
-    # "159-magic-gamma-telescope",                            # | ADD - MINMAX
-    # "342-mice-protein-expression",                          # | ADD - MINMAX
-    # "81-pen-based-recognition-of-handwritten-digits",       # | ADD - MINMAX
-    # "236-seeds",                                            # | ADD - MINMAX
-    # "95-spect-heart",                                       # | ADD - MINMAX
-    # "148-statlog-shuttle",                                  # | ADD - MINMAX
-    # "292-wholesale-customers",                              # | ADD
-    # "109-wine",                                             # | ADD - MINMAX
-    # "110-yeast",                                            # | ADD - MINMAX
-    # "107-waveform-database-generator-version-1",            # | ADD - MINMAX
-    # "446-scadi",                                            # | ADD - MINMAX
-    # "fashion_mnist",
-    # PAPER #
-    # NEW DATASETS #
-    # "39-ecoli",                                             # | ADD - MINMAX
-    # "91-soybean-small",                                     # | ADD - MINMAX
-    # "545-rice-cammeo-and-osmancik",                         # | ADD - MINMAX
-    # "602-dry-bean-dataset",                                 # | ADD - MINMAX
-    # NEW DATASETS #
+    "seeds",
+    "glass",
+    "446-scadi",
+    "hcv",
+    "yeast",
+    "image_segmentation",
+    "waveform",
+    "pendigits",
+    "letter_recognition",
+    "handwritten_digits",
+    "mice_protein",
+    "magic",
+    "shuttle",
+    "39-ecoli",                                             
+    "91-soybean-small",                                     
+    "545-rice-cammeo-and-osmancik",                         
+    "602-dry-bean-dataset",                                 
+    "facebook_live_sellers",
 ]
 
 const uci_translation = Dict(
