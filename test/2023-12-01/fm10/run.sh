@@ -5,19 +5,6 @@ rm -rf RegularizationAndGlobalOptimizationInModelBasedClustering.jl
 
 git clone -b feature/julia194 https://github.com/raphasampaio/RegularizationAndGlobalOptimizationInModelBasedClustering.jl.git
 
-export JULIA_DOWNLOAD="/tmp/julia/download"
-export JULIA_INSTALL="/tmp/julia/install"
-export JULIA_DEPOT_PATH="/tmp/julia/.julia"
-
-wget https://raw.githubusercontent.com/abelsiqueira/jill/master/jill.sh
-bash jill.sh --no-confirm -v 1.9.4
-
-export PATH=$PATH:"/tmp/julia/install"
-export JULIA_194="/tmp/julia/install/julia"
-
-which $JULIA_194
-$JULIA_194 --version
-
 cd RegularizationAndGlobalOptimizationInModelBasedClustering.jl
 chmod +x run.sh
 
