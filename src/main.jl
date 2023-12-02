@@ -25,7 +25,7 @@ function parse_commandline(args)
             arg_type = Vector{Int}
             eval_arg = true
         "--datasets"
-            default = [1:21;]
+            default = [1:25;]
             arg_type = Vector{Int}
             eval_arg = true
         "--tolerance"
