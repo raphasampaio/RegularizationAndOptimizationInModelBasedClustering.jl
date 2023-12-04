@@ -93,6 +93,30 @@ const uci_translation = Dict(
     "fashion_mnist" => "Fashion MNIST (Test) \\citep{xiao2017online}",
 )
 
+const uci_norm = Dict(
+    "facebook_live_sellers" => DatasetNormNone,
+    "handwritten_digits" => DatasetNormNone,
+    "hcv" => DatasetNormNone,
+    "human_activity_recognition" => DatasetNormNone,
+    "image_segmentation" => DatasetNormNone,
+    "ionosphere" => DatasetNormNone,
+    "iris" => DatasetNormNone,
+    "letter_recognition" => DatasetNormNone,
+    "magic" => DatasetNormNone,
+    "mice_protein" => DatasetNormNone,
+    "pendigits" => DatasetNormNone,
+    "seeds" => DatasetNormNone,
+    "spect" => DatasetNormNone,
+    "shuttle" => DatasetNormNone,
+    "wholesale" => DatasetNormNone,
+    "wines" => DatasetNormNone,
+    "yeast" => DatasetNormNone,
+    "waveform" => DatasetNormNone,
+    "scadi" => DatasetNormNone,
+    "glass" => DatasetNormNone,
+    "fashion_mnist" => DatasetNormNone,
+)
+
 function initialize()
     return nothing
 end
