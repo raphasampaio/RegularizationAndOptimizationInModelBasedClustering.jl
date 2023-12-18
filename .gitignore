@@ -13,3 +13,4 @@ upload_*
 dsbcaseinfo.dat
 
 .metadata
+*.DS_Store
