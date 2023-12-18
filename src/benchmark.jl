@@ -153,7 +153,8 @@ function run(benchmark::Benchmark, k::Int, d::Int, c::Float64, i::Int, tolerance
     file = "$(k)_$(d)_$(c)_$(i)"
 
     for symbol in benchmark.symbols
-        dataset = Dataset(joinpath("data", "$file.csv"))
+        path = joinpath("data", "$file.csv")
+        dataset = Dataset(path, DatasetNormNone)
         n, d = size(dataset.X)
 
         algorithm = get_algorithm(symbol, n, d, 123, tolerance, max_iterations, verbose)
@@ -198,7 +199,8 @@ end
 
 function run(benchmark::Benchmark, file::String, seeds::Vector{Int}, tolerance::Float64, max_iterations::Int, verbose::Bool)
     for symbol in benchmark.symbols
-        dataset = Dataset(joinpath("data", "uci", "$file.csv"))
+        path = joinpath("data", "uci", "$file.csv")
+        dataset = Dataset(path, DatasetNormNone)
         n, d = size(dataset.X)
         k = dataset.k
 
