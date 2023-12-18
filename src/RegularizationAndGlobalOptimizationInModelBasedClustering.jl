@@ -65,9 +65,9 @@ const uci_datasets = [
     "handwritten_digits",
     "shuttle",
     "pendigits",
-    "human-activity-recognition-using-smartphones",
     "letter_recognition",
-    "fashion_mnist",                             
+    "human-activity-recognition-using-smartphones",
+    "fashion_mnist",
 ]
 
 const uci_translation = Dict(
