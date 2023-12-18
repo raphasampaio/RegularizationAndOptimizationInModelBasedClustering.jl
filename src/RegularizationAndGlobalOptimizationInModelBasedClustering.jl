@@ -43,32 +43,51 @@ const translation = Dict(
 )
 
 const uci_datasets = [
-    "fashion_mnist",
-    "240-human-activity-recognition-using-smartphones",
-    "facebook_live_sellers",
-    "iris",
-    "wines",
-    "ionosphere",
-    "wholesale",
-    "spect",
 
-    "seeds",
-    "glass",
-    "446-scadi",
-    "hcv",
-    "yeast",
-    "image_segmentation",
-    "waveform",
-    "pendigits",
-    "letter_recognition",
-    "handwritten_digits",
-    "mice_protein",
-    "magic",
-    "shuttle",
-    "39-ecoli",                                             
-    "91-soybean-small",                                     
-    "545-rice-cammeo-and-osmancik",                         
-    "602-dry-bean-dataset",                                 
+"mice_protein",
+"image_segmentation",
+"446-scadi",
+"glass",
+"magic",
+"waveform",
+"yeast",
+"39-ecoli",
+"hcv",
+"545-rice-cammeo-and-osmancik",
+"ionosphere",
+"91-soybean-small",
+"wholesale",
+"spect",
+"wines",
+"seeds",
+"iris",
+
+    # "fashion_mnist",
+    # "240-human-activity-recognition-using-smartphones",
+    # "facebook_live_sellers",
+    # "iris",
+    # "wines",
+    # "ionosphere",
+    # "wholesale",
+    # "spect",
+
+    # "seeds",
+    # "glass",
+    # "446-scadi",
+    # "hcv",
+    # "yeast",
+    # "image_segmentation",
+    # "waveform",
+    # "pendigits",
+    # "letter_recognition",
+    # "handwritten_digits",
+    # "mice_protein",
+    # "magic",
+    # "shuttle",
+    # "39-ecoli",                                             
+    # "91-soybean-small",                                     
+    # "545-rice-cammeo-and-osmancik",                         
+    # "602-dry-bean-dataset",                                 
 ]
 
 const uci_translation = Dict(
@@ -194,8 +213,8 @@ function run(options::Dict{String, Any})
     filename = "uci-[$datasets_str]-[$i_str]-$timestamp"
 
     if options["uci"]
-        for dataset in options["datasets"]
-            run(benchmark, uci_datasets[dataset], options["i"], tolerance, maxiterations, verbose)
+        for dataset in uci_datasets
+            run(benchmark, dataset, options["i"], tolerance, maxiterations, verbose)
             save(benchmark, "..", filename)
         end
     end
