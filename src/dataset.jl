@@ -1,14 +1,12 @@
 using DelimitedFiles
 
-@enum DatasetNorm DatasetNormNone DatasetNormMinMax DatasetNormZScore
-
 struct Dataset
     path::String
     k::Int
     X::Matrix{Float64}
     expected::Array{Int}
 
-    function Dataset(path::String, norm::DatasetNorm)
+    function Dataset(path::String)
         open(path) do file
             table = readdlm(file, ',')
 
@@ -26,28 +24,21 @@ struct Dataset
 
             X = table[:, 2:size(table, 2)]
 
-            # tmin, tmax = StatsBase._compute_extrema(X, 1)
-            # @show tmin
-            # @show tmax
+            # # norm the matrix
+            # for i in 1:d
+            #     for j in 1:n
+            #         X[j, i] = X[j, i] / norm(X[:, i])
+            #     end
+            #     X[:, i] = (X[:, i] - mean(X[:, i])) / std(X[:, i])
+            # end
 
-            if norm == DatasetNormMinMax
-                X = standardize(UnitRangeTransform, X, dims=1)
-            elseif norm == DatasetNormZScore
-                X = standardize(ZScoreTransform, X, dims=1)
-            end
+            # min = minimum(X)
+            # max = maximum(X)
+            # X = (X .- min) ./ (max - min)
 
-            # tmin, tmax = StatsBase._compute_extrema(X, 1)
-            # @show tmin
-            # @show tmax
-
-            for i in 1:d
-                if any(isnan.(X[:, i]))
-                    @show i
-                    @show maximum(X[:, i])
-                    @show minimum(X[:, i])
-                    error("NaN")
-                end
-            end
+            # μ = mean(X)
+            # σ = std(X)
+            # X = (X .- μ) ./ σ
 
             return new(string(path), k, X, expected)
         end

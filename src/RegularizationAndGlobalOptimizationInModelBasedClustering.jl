@@ -10,7 +10,6 @@ using HypothesisTests
 using LinearAlgebra
 using RegularizedCovarianceMatrices
 using Printf
-using StatsBase
 using UnsupervisedClustering
 using TimerOutputs
 
@@ -43,55 +42,51 @@ const translation = Dict(
 )
 
 const uci_datasets = [
+    "facebook_live_sellers",
+    "handwritten_digits",
+    "hcv",
+    "human_activity_recognition",
+    "image_segmentation",
+    "ionosphere",
     "iris",
+    "letter_recognition",
+    "magic",
+    "mice_protein",
+    "pendigits",
     "seeds",
     "spect",
-    "ionosphere",
-    "soybean-small",
+    "shuttle",
     "wholesale",
     "wines",
-    "hcv",
-    "ecoli",
-    "rice-cammeo-and-osmancik",
     "yeast",
-    "scadi",
     "waveform",
-    "magic",
+    "scadi",
     "glass",
-    "facebook_live_sellers",
-    "image_segmentation",
-    "mice_protein",
-    "dry-bean-dataset",
-    "handwritten_digits",
-    "shuttle",
-    "pendigits",
-    "letter_recognition",
-    "human-activity-recognition-using-smartphones",
     "fashion_mnist",
 ]
 
 const uci_translation = Dict(
     "facebook_live_sellers" => "Facebook Live Sellers \\citep{dehouche2018facebook}",
-    "80-optical-recognition-of-handwritten-digits" => "Optical Recognition of Handwritten Digits \\citep{misc_optical_recognition_of_handwritten_digits_80}   ",
-    "571-hcv-data" => "HCV Data \\citep{misc_hcv_data_571}",
-    "240-human-activity-recognition-using-smartphones" => "Human Activity Recognition \\citep{misc_human_activity_recognition_using_smartphones_240}",
-    "50-image-segmentation" => "Image Segmentation \\citep{misc_image_segmentation_50}",
-    "52-ionosphere" => "Ionosphere \\citep{misc_ionosphere_52}",
-    "53-iris" => "Iris \\citep{misc_iris_53}",
-    "59-letter-recognition" => "Letter Recognition \\citep{misc_letter_recognition_59}",
-    "159-magic-gamma-telescope" => "MAGIC Gamma Telescope \\citep{misc_magic_gamma_telescope_159}",
-    "342-mice-protein-expression" => "Mice Protein Expression \\citep{misc_mice_protein_expression_342}",
-    "81-pen-based-recognition-of-handwritten-digits" => "Pen-Based Recognition of Handwritten Digits \\citep{misc_pen-based_recognition_of_handwritten_digits_81}",
-    "236-seeds" => "Seeds \\citep{misc_seeds_236}",
-    "95-spect-heart" => "SPECT Heart \\citep{misc_spect_heart_95}",
-    "148-statlog-shuttle" => "Statlog (Shuttle) \\citep{misc_statlog_(shuttle)_148}",
-    "292-wholesale-customers" => "Wholesale Customers \\citep{misc_wholesale_customers_292}",
-    "109-wine" => "Wine \\citep{misc_wine_109}",
-    "110-yeast" => "Yeast \\citep{misc_yeast_110}",
-    "107-waveform-database-generator-version-1" => "Waveform Database Generator (Version 1) \\citep{misc_waveform_database_generator_(version_1)_107}",
-    "446-scadi" => "Scadi \\citep{misc_scadi_446}",
-    "42-glass-identification" => "Glass Identification \\citep{misc_glass_identification_42}",
-    "fashion_mnist" => "Fashion MNIST (Test) \\citep{xiao2017online}",
+    "handwritten_digits" => "Handwritten Digits",
+    "hcv" => "HCV",
+    "human_activity_recognition" => "Human Activity Recognition \\citep{anguita2013public}",
+    "image_segmentation" => "Image Segmentation",
+    "ionosphere" => "Ionosphere",
+    "iris" => "Iris",
+    "letter_recognition" => "Letter Recognition",
+    "magic" => "MAGIC Gamma Telescope",
+    "mice_protein" => "Mice Protein Expression \\citep{higuera2015self}",
+    "pendigits" => "Pen-Based Recognition",
+    "seeds" => "Seeds",
+    "spect" => "SPECT Heart",
+    "shuttle" => "Statlog (Shuttle)",
+    "wholesale" => "Wholesale Customers",
+    "wines" => "Wines",
+    "yeast" => "Yeast",
+    "waveform" => "Waveform",
+    "scadi" => "Scadi",
+    "glass" => "Glass",
+    "fashion_mnist" => "Fashion MNIST",
 )
 
 function initialize()
@@ -105,8 +100,6 @@ include("postprocessing.jl")
 
 function run(options::Dict{String, Any})
     Sys.cpu_summary()
-    @show Sys.total_memory() / 2^20
-    @show Sys.free_memory() / 2^20
 
     benchmark = Benchmark()
 
