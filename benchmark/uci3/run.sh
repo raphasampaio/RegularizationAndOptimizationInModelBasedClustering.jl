@@ -3,7 +3,7 @@ set -e
 
 rm -rf RegularizationAndGlobalOptimizationInModelBasedClustering.jl
 
-git clone -b feature/julia194 https://github.com/raphasampaio/RegularizationAndGlobalOptimizationInModelBasedClustering.jl.git
+git clone -b feature/julia185 https://github.com/raphasampaio/RegularizationAndGlobalOptimizationInModelBasedClustering.jl.git
 
 cd RegularizationAndGlobalOptimizationInModelBasedClustering.jl
 chmod +x run.sh
