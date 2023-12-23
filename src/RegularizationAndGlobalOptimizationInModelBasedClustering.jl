@@ -68,15 +68,15 @@ const uci_datasets = [
     "statlog-shuttle",
     "pen-based-recognition-of-handwritten-digits",
     "letter-recognition",
-    "human-activity-recognition-using-smartphones",
-    "fashion-mnist",
     "zoo",
     "statlog-heart",
     "ecoli",
+    "human-activity-recognition-using-smartphones",
+    "fashion-mnist",    
 ]
 
 const uci_translation = Dict(
-    "facebook-live-sellers" => "Facebook Live Sellers \\citep{dehouche2018facebook}",
+    "facebook-live-sellers" => "Facebook Live Sellers \\citep{dehouche2020dataset}",
     "optical-recognition-of-handwritten-digits" => "Optical Recognition of Handwritten Digits \\citep{misc_optical_recognition_of_handwritten_digits_80}",
     "hcv-data" => "HCV Data \\citep{misc_hcv_data_571}",
     "human-activity-recognition-using-smartphones" => "Human Activity Recognition \\citep{misc_human_activity_recognition_using_smartphones_240}",
@@ -99,7 +99,7 @@ const uci_translation = Dict(
     "glass-identification" => "Glass Identification \\citep{misc_glass_identification_42}",
     "fashion-mnist" => "Fashion MNIST (Test) \\citep{xiao2017online}",
     "zoo" => "Zoo \\citep{misc_zoo_111}",
-    "statlog-heart" => "Statlog (Heart) \\citep{misc_statlog_(heart)_145",
+    "statlog-heart" => "Statlog (Heart) \\citep{misc_statlog_(heart)_145}",
     "ecoli" => "Ecoli \\citep{misc_ecoli_39}",
 )
 
@@ -117,7 +117,7 @@ const uci_norm = Dict(
     "pen-based-recognition-of-handwritten-digits" => DatasetNormNone,
     "seeds" => DatasetNormNone,
     "spect-heart" => DatasetNormNone,
-    "statlog-shuttle" => DatasetNormNone,
+    "statlog-shuttle" => DatasetNormMinMax,
     "wholesale-customers" => DatasetNormNone,
     "wine" => DatasetNormNone,
     "yeast" => DatasetNormNone,

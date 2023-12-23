@@ -200,7 +200,7 @@ end
 function run(benchmark::Benchmark, file::String, seeds::Vector{Int}, norm::DatasetNorm, tolerance::Float64, max_iterations::Int, verbose::Bool)
     for symbol in benchmark.symbols
         path = joinpath("data", "uci", "$file.csv")
-        dataset = Dataset(path, norm)
+        dataset = Dataset(path, DatasetNormMinMax)
         n, d = size(dataset.X)
         k = dataset.k
 

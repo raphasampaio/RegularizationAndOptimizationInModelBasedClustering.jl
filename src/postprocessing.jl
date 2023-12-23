@@ -136,11 +136,11 @@ println(raw"""
 \centering
 \scalebox{0.9}
 {
-\begin{tabular}{@{}c|cccccccccc@{}}
+\begin{tabular}{@{}c|rrrrrrrrrr@{}}
 \toprule
-\multirow{3}{*}{\#} & k-means & k-means & GMM & GMM & GMM & GMM & GMM   & GMM    & GMM    & GMM    \\
-                    &         & HG      &     & MS  & RS  & HG  &        & MS     & RS     & HG     \\
-                    &         &         &     &     &     &     & Shrunk & Shrunk & Shrunk & Shrunk \\ \midrule""")
+\multirow{3}{*}{\#} & \multicolumn{1}{c}{k-means} & \multicolumn{1}{c}{k-means} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM}   & \multicolumn{1}{c}{GMM}    & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} \\
+    & & \multicolumn{1}{c}{HG} & & \multicolumn{1}{c}{MS} & \multicolumn{1}{c}{RS}  & \multicolumn{1}{c}{HG} & & \multicolumn{1}{c}{MS} & \multicolumn{1}{c}{RS}     & \multicolumn{1}{c}{HG} \\
+    & & & & & & & \multicolumn{1}{c}{Shrunk} & \multicolumn{1}{c}{Shrunk} & \multicolumn{1}{c}{Shrunk} & \multicolumn{1}{c}{Shrunk} \\ \midrule""")
 
     for (i, dataset) in enumerate(sort(uci_datasets))
         print("\\texttt{$('@' + i)}")
@@ -320,7 +320,7 @@ function wilcoxon()
 \\bottomrule
 \\end{tabular}
 }
-\\caption{Comparison with k-means, k-means HG and GMM: Pairwise Wilcoxon tests}
+\\caption{Pairwise Wilcoxon tests comparing the ARI of GMM HG Shrunk and the other algorithms}
 \\label{tab:wilcoxon2}
 \\end{table}
 """)
@@ -351,7 +351,7 @@ println("""
 \\bottomrule
 \\end{tabular}
 }
-\\caption{Comparison with k-means, k-means HG and GMM variations: Pairwise Wilcoxon tests}
+\\caption{Pairwise Wilcoxon tests comparing the ARI of GMM HG Shrunk and the other algorithms}
 \\label{tab:wilcoxon3}
 \\end{table}
 """)
@@ -393,11 +393,11 @@ println(raw"""
 \centering
 \scalebox{0.9}
 {
-\begin{tabular}{@{}c|cccccccccc@{}}
+\begin{tabular}{@{}c|rrrrrrrrrr@{}}
 \toprule
-\multirow{3}{*}{k} & k-means & k-means & GMM & GMM & GMM & GMM & GMM & GMM & GMM & GMM \\
- &  & HG &  & MS & RS & HG &  & MS & RS & HG \\
- &  &  &  &  &  &  & Shrunk & Shrunk & Shrunk & Shrunk \\ \midrule""")
+\multirow{3}{*}{\#} & \multicolumn{1}{c}{k-means} & \multicolumn{1}{c}{k-means} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM}   & \multicolumn{1}{c}{GMM}    & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} \\
+    & & \multicolumn{1}{c}{HG} & & \multicolumn{1}{c}{MS} & \multicolumn{1}{c}{RS}  & \multicolumn{1}{c}{HG} & & \multicolumn{1}{c}{MS} & \multicolumn{1}{c}{RS}     & \multicolumn{1}{c}{HG} \\
+    & & & & & & & \multicolumn{1}{c}{Shrunk} & \multicolumn{1}{c}{Shrunk} & \multicolumn{1}{c}{Shrunk} & \multicolumn{1}{c}{Shrunk} \\ \midrule""")
 
 for k in [3, 10, 20]
     print("$k ")
@@ -420,7 +420,7 @@ println("\\\\ \\bottomrule")
 
 println(raw"""\end{tabular}
 }
-\caption{Average CPU time in seconds, for a different target number of clusters}
+\caption{Average CPU time in seconds for a different target number of clusters}
 \label{cputime1}
 \end{table}
 
@@ -428,11 +428,11 @@ println(raw"""\end{tabular}
 \centering
 \scalebox{0.9}
 {
-\begin{tabular}{@{}c|cccccccccc@{}}
+\begin{tabular}{@{}c|rrrrrrrrrr@{}}
 \toprule
-\multirow{3}{*}{d} & k-means & k-means & GMM & GMM & GMM & GMM & GMM & GMM & GMM & GMM \\
- &  & HG &  & MS & RS & HG &  & MS & RS & HG \\
- &  &  &  &  &  &  & Shrunk & Shrunk & Shrunk & Shrunk \\ \midrule""")
+\multirow{3}{*}{\#} & \multicolumn{1}{c}{k-means} & \multicolumn{1}{c}{k-means} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM}   & \multicolumn{1}{c}{GMM}    & \multicolumn{1}{c}{GMM} & \multicolumn{1}{c}{GMM} \\
+    & & \multicolumn{1}{c}{HG} & & \multicolumn{1}{c}{MS} & \multicolumn{1}{c}{RS}  & \multicolumn{1}{c}{HG} & & \multicolumn{1}{c}{MS} & \multicolumn{1}{c}{RS}     & \multicolumn{1}{c}{HG} \\
+    & & & & & & & \multicolumn{1}{c}{Shrunk} & \multicolumn{1}{c}{Shrunk} & \multicolumn{1}{c}{Shrunk} & \multicolumn{1}{c}{Shrunk} \\ \midrule""")
 
 for d in [2, 5, 10, 20, 30, 40]
     print("$d ")
@@ -455,7 +455,7 @@ println("\\\\ \\bottomrule")
 
 println(raw"""\end{tabular}
 }
-\caption{Average CPU time in seconds, for different number of features}
+\caption{Average CPU time in seconds for different target number of features}
 \label{cputime2}
 \end{table}
 """)
