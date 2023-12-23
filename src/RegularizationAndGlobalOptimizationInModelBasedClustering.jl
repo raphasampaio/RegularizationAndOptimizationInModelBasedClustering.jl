@@ -19,6 +19,11 @@ using Printf
 using Random
 using Statistics
 
+include("dataset.jl")
+include("evaluation.jl")
+include("benchmark.jl")
+include("postprocessing.jl")
+
 const translation = Dict(
     "kmeans" => "k-means",
     "kmeans_ms" => "k-means MS",
@@ -65,11 +70,14 @@ const uci_datasets = [
     "letter-recognition",
     "human-activity-recognition-using-smartphones",
     "fashion-mnist",
+    "zoo",
+    "statlog-heart",
+    "ecoli",
 ]
 
 const uci_translation = Dict(
     "facebook-live-sellers" => "Facebook Live Sellers \\citep{dehouche2018facebook}",
-    "optical-recognition-of-handwritten-digits" => "Optical Recognition of Handwritten Digits \\citep{misc_optical_recognition_of_handwritten_digits_80}   ",
+    "optical-recognition-of-handwritten-digits" => "Optical Recognition of Handwritten Digits \\citep{misc_optical_recognition_of_handwritten_digits_80}",
     "hcv-data" => "HCV Data \\citep{misc_hcv_data_571}",
     "human-activity-recognition-using-smartphones" => "Human Activity Recognition \\citep{misc_human_activity_recognition_using_smartphones_240}",
     "image-segmentation" => "Image Segmentation \\citep{misc_image_segmentation_50}",
@@ -90,16 +98,38 @@ const uci_translation = Dict(
     "scadi" => "Scadi \\citep{misc_scadi_446}",
     "glass-identification" => "Glass Identification \\citep{misc_glass_identification_42}",
     "fashion-mnist" => "Fashion MNIST (Test) \\citep{xiao2017online}",
+    "zoo" => "Zoo \\citep{misc_zoo_111}",
+    "statlog-heart" => "Statlog (Heart) \\citep{misc_statlog_(heart)_145",
+    "ecoli" => "Ecoli \\citep{misc_ecoli_39}",
 )
 
-function initialize()
-    return nothing
-end
-
-include("dataset.jl")
-include("evaluation.jl")
-include("benchmark.jl")
-include("postprocessing.jl")
+const uci_norm = Dict(
+    "facebook-live-sellers" => DatasetNormNone,
+    "optical-recognition-of-handwritten-digits" => DatasetNormNone,
+    "hcv-data" => DatasetNormNone,
+    "human-activity-recognition-using-smartphones" => DatasetNormNone,
+    "image-segmentation" => DatasetNormNone,
+    "ionosphere" => DatasetNormNone,
+    "iris" => DatasetNormNone,
+    "letter-recognition" => DatasetNormNone,
+    "magic-gamma-telescope" => DatasetNormNone,
+    "mice-protein-expression" => DatasetNormNone,
+    "pen-based-recognition-of-handwritten-digits" => DatasetNormNone,
+    "seeds" => DatasetNormNone,
+    "spect-heart" => DatasetNormNone,
+    "statlog-shuttle" => DatasetNormNone,
+    "wholesale-customers" => DatasetNormNone,
+    "wine" => DatasetNormNone,
+    "yeast" => DatasetNormNone,
+    "soybean-small" => DatasetNormNone,
+    "waveform-database-generator-version-1" => DatasetNormNone,
+    "scadi" => DatasetNormNone,
+    "glass-identification" => DatasetNormNone,
+    "fashion-mnist" => DatasetNormNone,
+    "zoo" => DatasetNormMinMax,
+    "statlog-heart" => DatasetNormMinMax,
+    "ecoli" => DatasetNormMinMax,
+)
 
 function run(options::Dict{String, Any})
     Sys.cpu_summary()
@@ -191,8 +221,10 @@ function run(options::Dict{String, Any})
     filename = "uci-[$datasets_str]-[$i_str]-$timestamp"
 
     if options["uci"]
-        for dataset in options["datasets"]
-            run(benchmark, uci_datasets[dataset], options["i"], tolerance, maxiterations, verbose)
+        for dataset_integer in options["datasets"]
+            dataset = uci_datasets[dataset_integer]
+            norm = uci_norm[dataset]
+            run(benchmark, dataset, options["i"], norm, tolerance, maxiterations, verbose)
             save(benchmark, "..", filename)
         end
     end
