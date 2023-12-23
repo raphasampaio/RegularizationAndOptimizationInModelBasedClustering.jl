@@ -25,7 +25,7 @@ function uci()
         "gmm_hg_shrunk"
     ]
 
-    results = CSV.read(joinpath("results", "uci-new.csv"), DataFrame)
+    results = CSV.read(joinpath("results", "uci.csv"), DataFrame)
 
     println(raw"""
 \begin{table}[htbp]
@@ -325,7 +325,7 @@ function wilcoxon()
 \\end{table}
 """)
 
-results = CSV.read(joinpath("results", "uci-new.csv"), DataFrame)
+results = CSV.read(joinpath("results", "uci.csv"), DataFrame)
 sort!(results, [:algorithm, :dataset, :i])
 
 println("""
