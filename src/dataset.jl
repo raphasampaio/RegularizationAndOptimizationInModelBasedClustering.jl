@@ -42,6 +42,7 @@ struct Dataset
 
             for i in 1:d
                 if any(isnan.(X[:, i]))
+                    @show path
                     @show i
                     @show maximum(X[:, i])
                     @show minimum(X[:, i])
