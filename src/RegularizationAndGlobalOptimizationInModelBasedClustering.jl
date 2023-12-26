@@ -10,6 +10,7 @@ using HypothesisTests
 using LinearAlgebra
 using RegularizedCovarianceMatrices
 using Printf
+using StatsBase
 using UnsupervisedClustering
 using TimerOutputs
 
@@ -17,6 +18,11 @@ using Dates
 using Printf
 using Random
 using Statistics
+
+include("dataset.jl")
+include("evaluation.jl")
+include("benchmark.jl")
+include("postprocessing.jl")
 
 const translation = Dict(
     "kmeans" => "k-means",
@@ -42,64 +48,93 @@ const translation = Dict(
 )
 
 const uci_datasets = [
-    "facebook_live_sellers",
-    "handwritten_digits",
-    "hcv",
-    "human_activity_recognition",
-    "image_segmentation",
-    "ionosphere",
     "iris",
-    "letter_recognition",
-    "magic",
-    "mice_protein",
-    "pendigits",
     "seeds",
-    "spect",
-    "shuttle",
-    "wholesale",
-    "wines",
+    "spect-heart",
+    "ionosphere",
+    "soybean-small",
+    "wholesale-customers",
+    "wine",
+    "hcv-data",
     "yeast",
-    "waveform",
     "scadi",
-    "glass",
-    "fashion_mnist",
+    "waveform-database-generator-version-1",
+    "magic-gamma-telescope",
+    "glass-identification",
+    "facebook-live-sellers",
+    "image-segmentation",
+    "mice-protein-expression",
+    "optical-recognition-of-handwritten-digits",
+    "statlog-shuttle",
+    "pen-based-recognition-of-handwritten-digits",
+    "letter-recognition",
+    "zoo",
+    "statlog-heart",
+    "ecoli",
+    "human-activity-recognition-using-smartphones",
+    "fashion-mnist",    
 ]
 
 const uci_translation = Dict(
-    "facebook_live_sellers" => "Facebook Live Sellers \\citep{dehouche2018facebook}",
-    "handwritten_digits" => "Handwritten Digits",
-    "hcv" => "HCV",
-    "human_activity_recognition" => "Human Activity Recognition \\citep{anguita2013public}",
-    "image_segmentation" => "Image Segmentation",
-    "ionosphere" => "Ionosphere",
-    "iris" => "Iris",
-    "letter_recognition" => "Letter Recognition",
-    "magic" => "MAGIC Gamma Telescope",
-    "mice_protein" => "Mice Protein Expression \\citep{higuera2015self}",
-    "pendigits" => "Pen-Based Recognition",
-    "seeds" => "Seeds",
-    "spect" => "SPECT Heart",
-    "shuttle" => "Statlog (Shuttle)",
-    "wholesale" => "Wholesale Customers",
-    "wines" => "Wines",
-    "yeast" => "Yeast",
-    "waveform" => "Waveform",
-    "scadi" => "Scadi",
-    "glass" => "Glass",
-    "fashion_mnist" => "Fashion MNIST",
+    "facebook-live-sellers" => "Facebook Live Sellers \\citep{dehouche2020dataset}",
+    "optical-recognition-of-handwritten-digits" => "Optical Recognition of Handwritten Digits \\citep{misc_optical_recognition_of_handwritten_digits_80}",
+    "hcv-data" => "HCV Data \\citep{misc_hcv_data_571}",
+    "human-activity-recognition-using-smartphones" => "Human Activity Recognition \\citep{misc_human_activity_recognition_using_smartphones_240}",
+    "image-segmentation" => "Image Segmentation \\citep{misc_image_segmentation_50}",
+    "ionosphere" => "Ionosphere \\citep{misc_ionosphere_52}",
+    "iris" => "Iris \\citep{misc_iris_53}",
+    "letter-recognition" => "Letter Recognition \\citep{misc_letter_recognition_59}",
+    "magic-gamma-telescope" => "MAGIC Gamma Telescope \\citep{misc_magic_gamma_telescope_159}",
+    "mice-protein-expression" => "Mice Protein Expression \\citep{misc_mice_protein_expression_342}",
+    "pen-based-recognition-of-handwritten-digits" => "Pen-Based Recognition of Handwritten Digits \\citep{misc_pen-based_recognition_of_handwritten_digits_81}",
+    "seeds" => "Seeds \\citep{misc_seeds_236}",
+    "spect-heart" => "SPECT Heart \\citep{misc_spect_heart_95}",
+    "statlog-shuttle" => "Statlog (Shuttle) \\citep{misc_statlog_(shuttle)_148}",
+    "wholesale-customers" => "Wholesale Customers \\citep{misc_wholesale_customers_292}",
+    "wine" => "Wine \\citep{misc_wine_109}",
+    "yeast" => "Yeast \\citep{misc_yeast_110}",
+    "soybean-small" => "Soybean (Small) \\citep{misc_soybean_(small)_91}",
+    "waveform-database-generator-version-1" => "Waveform Database Generator (Version 1) \\citep{misc_waveform_database_generator_(version_1)_107}",
+    "scadi" => "Scadi \\citep{misc_scadi_446}",
+    "glass-identification" => "Glass Identification \\citep{misc_glass_identification_42}",
+    "fashion-mnist" => "Fashion MNIST (Test) \\citep{xiao2017online}",
+    "zoo" => "Zoo \\citep{misc_zoo_111}",
+    "statlog-heart" => "Statlog (Heart) \\citep{misc_statlog_(heart)_145}",
+    "ecoli" => "Ecoli \\citep{misc_ecoli_39}",
 )
 
-function initialize()
-    return nothing
-end
-
-include("dataset.jl")
-include("evaluation.jl")
-include("benchmark.jl")
-include("postprocessing.jl")
+const uci_norm = Dict(
+    "facebook-live-sellers" => DatasetNormNone,
+    "optical-recognition-of-handwritten-digits" => DatasetNormNone,
+    "hcv-data" => DatasetNormNone,
+    "human-activity-recognition-using-smartphones" => DatasetNormNone,
+    "image-segmentation" => DatasetNormNone,
+    "ionosphere" => DatasetNormNone,
+    "iris" => DatasetNormNone,
+    "letter-recognition" => DatasetNormNone,
+    "magic-gamma-telescope" => DatasetNormNone,
+    "mice-protein-expression" => DatasetNormNone,
+    "pen-based-recognition-of-handwritten-digits" => DatasetNormNone,
+    "seeds" => DatasetNormNone,
+    "spect-heart" => DatasetNormNone,
+    "statlog-shuttle" => DatasetNormMinMax,
+    "wholesale-customers" => DatasetNormNone,
+    "wine" => DatasetNormNone,
+    "yeast" => DatasetNormNone,
+    "soybean-small" => DatasetNormNone,
+    "waveform-database-generator-version-1" => DatasetNormNone,
+    "scadi" => DatasetNormNone,
+    "glass-identification" => DatasetNormNone,
+    "fashion-mnist" => DatasetNormNone,
+    "zoo" => DatasetNormMinMax,
+    "statlog-heart" => DatasetNormMinMax,
+    "ecoli" => DatasetNormMinMax,
+)
 
 function run(options::Dict{String, Any})
     Sys.cpu_summary()
+    @show Sys.total_memory() / 2^20
+    @show Sys.free_memory() / 2^20
 
     benchmark = Benchmark()
 
@@ -186,8 +221,10 @@ function run(options::Dict{String, Any})
     filename = "uci-[$datasets_str]-[$i_str]-$timestamp"
 
     if options["uci"]
-        for dataset in options["datasets"]
-            run(benchmark, uci_datasets[dataset], options["i"], tolerance, maxiterations, verbose)
+        for dataset_integer in options["datasets"]
+            dataset = uci_datasets[dataset_integer]
+            norm = uci_norm[dataset]
+            run(benchmark, dataset, options["i"], norm, tolerance, maxiterations, verbose)
             save(benchmark, "..", filename)
         end
     end

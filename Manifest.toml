@@ -1,8 +1,8 @@
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.8.4"
+julia_version = "1.8.5"
 manifest_format = "2.0"
-project_hash = "f6573606e605acb44f78ef3118ec5318d2e8a475"
+project_hash = "7e4e91ae34bd58ce3083208c6a4aefa4eb6a9752"
 
 [[deps.ArgParse]]
 deps = ["Logging", "TextWrap"]

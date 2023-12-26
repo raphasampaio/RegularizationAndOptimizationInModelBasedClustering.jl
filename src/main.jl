@@ -25,7 +25,7 @@ function parse_commandline(args)
             arg_type = Vector{Int}
             eval_arg = true
         "--datasets"
-            default = [1:21;]
+            default = [1:length(RegularizationAndGlobalOptimizationInModelBasedClustering.uci_datasets);]
             arg_type = Vector{Int}
             eval_arg = true
         "--tolerance"
@@ -45,8 +45,6 @@ function main(args)
     @info("RegularizationAndGlobalOptimizationInModelBasedClustering")
 
     @show options = parse_commandline(args)
-
-    initialize()
 
     reset_timer!()
     run(options)
